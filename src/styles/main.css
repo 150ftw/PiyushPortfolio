@@ -9,8 +9,14 @@
   --text-muted: #888888;
   --accent-orange: #FF7738;
   --accent-gold: #FFAE00;
-  --transition-smooth: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-  --max-width: 1400px;
+  --font-hero: clamp(3.5rem, 12vw, 10rem);
+  --font-h2: clamp(2.5rem, 6vw, 4rem);
+  --font-h3: clamp(1.8rem, 4vw, 2.5rem);
+  --font-body: 1.1rem;
+  --font-nav: 1.1rem;
+  --section-padding: clamp(60px, 10vw, 120px);
+  --container-width: 1400px;
+  --transition-smooth: all 0.6s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 * {
@@ -50,7 +56,7 @@ ul {
 }
 
 .container {
-  max-width: var(--max-width);
+  max-width: var(--container-width);
   margin: 0 auto;
   padding: 0 60px;
 }
@@ -59,13 +65,31 @@ ul {
   .container {
     padding: 0 24px;
   }
+  nav {
+    padding: 20px 25px;
+  }
+  
+  .hero-title {
+    line-height: 0.9;
+    margin-bottom: 30px;
+  }
+
+  .projects-grid {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+  
+  .hero-stats {
+    flex-direction: column;
+    gap: 20px;
+  }
 }
 
 /* Utilities */
 .text-orange { color: var(--accent-orange); }
 .text-gold { color: var(--accent-gold); }
 .text-muted { color: var(--text-muted); }
-.section-padding { padding: 140px 0; }
+.section-padding { padding: var(--section-padding) 0; }
 
 /* Navbar */
 nav {
@@ -179,7 +203,7 @@ nav.scrolled {
 }
 
 .hero-title {
-  font-size: clamp(4.5rem, 18vw, 15rem);
+  font-size: var(--font-hero);
   line-height: 0.85;
   margin-bottom: 50px;
   color: var(--text-secondary);
@@ -245,17 +269,23 @@ nav.scrolled {
   background-color: var(--bg-primary);
 }
 
+.section-title {
+  font-size: var(--font-h2);
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+.about-text {
+  font-family: 'Inria Serif', serif;
+  font-size: clamp(1.1rem, 2vw, 1.4rem);
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
 .projects-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 60px;
-}
-
-@media (max-width: 900px) {
-  .projects-grid {
-    grid-template-columns: 1fr;
-    gap: 40px;
-  }
 }
 
 .project-card {
@@ -266,16 +296,18 @@ nav.scrolled {
 }
 
 .project-img-wrapper {
-  aspect-ratio: 1/1;
+  position: relative;
   overflow: hidden;
-  background-color: var(--bg-card);
+  border-radius: 12px;
+  aspect-ratio: 16 / 10;
+  background: #111;
 }
 
 .project-img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  transition: var(--transition-smooth);
+  transition: transform 0.8s cubic-bezier(0.2, 1, 0.3, 1);
 }
 
 .project-card:hover .project-img {

@@ -275,19 +275,34 @@ const Layout = ({ children, isMobile, mouseX, mouseY }) => {
               "Ghaziabad, India",
               ...(!isMobile ? ["Available Worldwide"] : []),
               `© ${new Date().getFullYear()} Piyush Rawat`
-            ].map((text, i) => (
-              <motion.div
+            ].map((item, i) => (
+              <motion.div 
                 key={i}
-                onMouseEnter={() => setHoveredIndex(i)}
-                onMouseLeave={() => setHoveredIndex(null)}
-                animate={{
-                  opacity: hoveredIndex === i ? 1 : 0.4,
-                  scale: hoveredIndex === i ? 1.05 : 1,
-                  color: hoveredIndex === i ? "#fff" : "rgba(255,255,255,0.8)"
-                }}
-                style={{ cursor: 'default', transition: 'color 0.3s ease' }}
+                className="footer-meta-item"
+                onHoverStart={() => setHoveredIndex(i)}
+                onHoverEnd={() => setHoveredIndex(null)}
+                style={{ position: 'relative', cursor: 'default' }}
               >
-                {text}
+                {/* Reflection Puddle (Floor Impact) */}
+                <motion.div 
+                  className="footer-light-puddle"
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  animate={{ 
+                    opacity: (hoveredIndex === i) ? 1 : (hoveredIndex === null && i === 1) ? 0.6 : 0,
+                    scale: (hoveredIndex === i) ? 1.1 : (hoveredIndex === null && i === 1) ? 1 : 0.8,
+                  }}
+                  transition={{ duration: 0.6, ease: "easeOut" }}
+                />
+
+                <motion.span
+                  animate={{ 
+                    color: (hoveredIndex === i || (hoveredIndex === null && i === 1)) ? '#fff' : 'rgba(255, 255, 255, 0.4)',
+                    textShadow: (hoveredIndex === i || (hoveredIndex === null && i === 1)) ? '0 0 10px rgba(168, 85, 247, 0.5)' : 'none'
+                  }}
+                  transition={{ duration: 0.4 }}
+                >
+                  {item}
+                </motion.span>
               </motion.div>
             ))}
           </div>

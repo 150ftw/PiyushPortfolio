@@ -299,23 +299,23 @@ body {
   padding-right: 5vw;
 }
 
-/* Right column: fixed-height box that clips overflow */
+/* Right column: fixed-height box — tall enough to contain the card */
 .expertise-cards-stack {
   position: relative;
-  height: 320px;
+  height: 400px;
   width: 100%;
-  overflow: hidden;
+  /* No overflow:hidden — cards are vertically centred by Framer Motion */
 }
 
-/* Card itself — positioned by Framer Motion (top: 50%, translateY(-50%)) */
+/* Card itself */
 .expertise-card-frame {
   width: 100%;
   background: rgba(15, 15, 15, 0.85);
   backdrop-filter: blur(20px);
   padding: 44px;
   border-radius: 20px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5);
+  border: 1px solid rgba(133, 77, 255, 0.25);
+  box-shadow: 0 30px 80px rgba(133, 77, 255, 0.12), 0 0 0 1px rgba(255,255,255,0.05);
 }
 
 @media (max-width: 768px) {
@@ -591,28 +591,103 @@ body {
   font-size: 0.9rem;
 }
 
-/* Footer */
+/* ── Footer / Contact ── */
 footer {
   background-color: var(--bg-primary);
-  padding: 140px 0;
+  padding: 120px 0 80px;
   text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Dramatic background glow behind the CTA */
+footer::before {
+  content: '';
+  position: absolute;
+  bottom: -20%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80vw;
+  height: 60vw;
+  background: radial-gradient(ellipse at center, rgba(133, 77, 255, 0.18) 0%, transparent 70%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+.footer-content {
+  position: relative;
+  z-index: 1;
 }
 
 .contact-link {
-  font-size: clamp(4rem, 15vw, 12rem);
-  font-weight: 900;
-  color: var(--text-secondary);
-  line-height: 0.8;
-  display: block;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-decoration: none;
+  color: white;
+  cursor: pointer;
 }
 
-.contact-link span {
+.contact-cta-label {
+  font-size: 0.85rem;
+  letter-spacing: 6px;
+  text-transform: uppercase;
+  color: var(--accent-purple);
+  opacity: 0.9;
+  margin-bottom: 24px;
+  font-weight: 600;
+  font-family: 'Outfit', sans-serif;
+}
+
+.contact-headline {
+  font-size: clamp(4rem, 13vw, 16rem);
+  font-weight: 900;
+  font-family: 'Outfit', sans-serif;
+  line-height: 0.85;
+  letter-spacing: -2px;
+  background: linear-gradient(135deg, #ffffff 0%, rgba(133, 77, 255, 0.9) 60%, #ffffff 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
   display: block;
-  font-family: 'Inria Serif', serif;
-  font-style: italic;
-  font-size: 0.3em;
-  font-weight: 300;
-  margin-top: 20px;
+  transition: opacity 0.3s ease;
+}
+
+.contact-link:hover .contact-headline {
+  opacity: 0.85;
+}
+
+.contact-subtitle {
+  font-size: clamp(1rem, 2vw, 1.6rem);
+  color: var(--accent-purple);
+  margin-top: 32px;
+  letter-spacing: 2px;
+  font-family: 'Outfit', sans-serif;
+  font-weight: 500;
+}
+
+.footer-meta {
+  margin-top: 100px;
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  width: 100%;
+  opacity: 0.4;
+  font-size: 0.85rem;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+
+@media (max-width: 768px) {
+  .contact-headline {
+    font-size: clamp(3rem, 18vw, 6rem);
+    letter-spacing: -1px;
+  }
+  .footer-meta {
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+  }
 }
 
 /* Animations */

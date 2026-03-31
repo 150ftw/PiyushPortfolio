@@ -394,16 +394,15 @@ const App = () => {
               </div>
 
               {/* Right: animating card */}
-              <div className="expertise-cards-stack">
+              <div className="expertise-cards-stack" style={{ display: 'flex', alignItems: 'center' }}>
                 <AnimatePresence mode="wait">
                   <motion.div
                     key={activeCard}
                     className="expertise-card-frame"
-                    initial={{ opacity: 0, y: 60, scale: 0.92 }}
+                    initial={{ opacity: 0, y: 50, scale: 0.94 }}
                     animate={{ opacity: 1, y: 0, scale: 1 }}
-                    exit={{ opacity: 0, y: -60, scale: 0.92 }}
-                    transition={{ duration: 0.45, ease: [0.16, 1, 0.3, 1] }}
-                    style={{ position: 'absolute', top: '50%', left: 0, width: '100%', transform: 'translateY(-50%)' }}
+                    exit={{ opacity: 0, y: -50, scale: 0.94 }}
+                    transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
                   >
                     <h4 style={{ color: 'var(--accent-purple)', fontSize: 'clamp(1.8rem, 3.5vw, 2.8rem)', marginBottom: '24px', fontFamily: 'Outfit', fontWeight: 800 }}>
                       {expertiseItems[activeCard].title}
@@ -419,28 +418,56 @@ const App = () => {
         </section>
 
         {/* ── Footer ── */}
-        <footer id="footer" className="section-padding">
-          <div className="container footer-content" style={{ textAlign: 'center' }}>
+        <footer id="footer">
+          <div className="container footer-content">
             <motion.a
               href="mailto:hello@piyushrawat.com"
               className="contact-link"
-              style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}
             >
-              <MaskText>GET IN TOUCH</MaskText>
               <motion.span
+                className="contact-cta-label"
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.8 }}
+              >
+                ✦ &nbsp; Available for projects &nbsp; ✦
+              </motion.span>
+
+              <motion.span
+                className="contact-headline"
+                initial={{ opacity: 0, y: 60 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 1, ease: [0.16, 1, 0.3, 1], delay: 0.1 }}
+              >
+                GET IN
+              </motion.span>
+              <motion.span
+                className="contact-headline"
+                initial={{ opacity: 0, y: 60 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 1, ease: [0.16, 1, 0.3, 1], delay: 0.2 }}
+              >
+                TOUCH
+              </motion.span>
+
+              <motion.span
+                className="contact-subtitle"
                 initial={{ opacity: 0 }}
                 whileInView={{ opacity: 1 }}
-                transition={{ delay: 0.5 }}
-                style={{ fontSize: isMobile ? '1.1rem' : '1.5rem', color: 'var(--accent-purple)', marginTop: '20px' }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.6, duration: 0.8 }}
               >
-                START YOUR PROJECT TODAY →
+                hello@piyushrawat.com &nbsp;→
               </motion.span>
             </motion.a>
 
-            <div style={{ marginTop: '100px', display: 'flex', flexDirection: isMobile ? 'column' : 'row', justifyContent: 'space-between', gap: '20px', width: '100%', opacity: 0.5, fontSize: '0.9rem' }}>
-              <div>GHAZIABAD, INDIA</div>
-              {!isMobile && <div>AVAILABLE WORLDWIDE</div>}
-              <div>© {new Date().getFullYear()} PIYUSH RAWAT</div>
+            <div className="footer-meta">
+              <div>Ghaziabad, India</div>
+              {!isMobile && <div>Available Worldwide</div>}
+              <div>© {new Date().getFullYear()} Piyush Rawat</div>
             </div>
           </div>
         </footer>

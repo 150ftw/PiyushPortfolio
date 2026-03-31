@@ -202,6 +202,27 @@ const Layout = ({ children, isMobile, mouseX, mouseY }) => {
           </Link>
 
           <div className="footer-meta" style={{ position: 'relative', marginTop: isMobile ? '60px' : '100px' }}>
+            {/* Physical Spotlight Fixture */}
+            {!isMobile && (
+              <motion.div
+                className="footer-spotlight-fixture"
+                initial={{ opacity: 0 }}
+                animate={{
+                  opacity: hoveredIndex !== null ? 1 : 0,
+                  rotate: hoveredIndex === 0 ? -15 : hoveredIndex === 1 ? 0 : hoveredIndex === 2 ? 15 : 0
+                }}
+                transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+              >
+                <svg width="40" height="24" viewBox="0 0 40 24" fill="none">
+                  <path d="M10 4H30V20C30 22.2091 28.2091 24 26 24H14C11.7909 24 10 22.2091 10 20V4Z" fill="#111" stroke="rgba(133, 77, 255, 0.4)" strokeWidth="1" />
+                  <rect x="12" y="2" width="16" height="4" rx="2" fill="#222" />
+                  <circle cx="20" cy="16" r="6" fill="rgba(133, 77, 255, 0.3)" filter="blur(2px)" />
+                  <circle cx="20" cy="16" r="3" fill="#fff" />
+                </svg>
+                <div className="footer-spotlight-lens-flare" />
+              </motion.div>
+            )}
+
             {/* Spotlight Beam */}
             {!isMobile && (
               <motion.div

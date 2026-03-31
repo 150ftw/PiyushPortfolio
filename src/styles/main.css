@@ -867,16 +867,43 @@ footer::before {
   z-index: 5;
 }
 
+.footer-spotlight-fixture {
+  position: absolute;
+  top: -140px;
+  left: 50%;
+  transform-origin: center top;
+  width: 40px;
+  height: 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  z-index: 6;
+  pointer-events: none;
+  filter: drop-shadow(0 0 10px rgba(133, 77, 255, 0.3));
+}
+
+.footer-spotlight-lens-flare {
+  width: 2px;
+  height: 2px;
+  background: white;
+  border-radius: 50%;
+  box-shadow: 0 0 20px 5px white, 0 0 40px 10px rgba(133, 77, 255, 0.6);
+  position: absolute;
+  top: 16px;
+  left: 50%;
+  transform: translateX(-50%);
+}
+
 .footer-spotlight-beam {
   position: absolute;
-  top: -120px;
+  top: -124px;
   left: 50%;
   width: 150px;
   height: 200px;
   background: radial-gradient(
     ellipse at top,
-    rgba(133, 77, 255, 0.4) 0%,
-    rgba(133, 77, 255, 0.1) 40%,
+    rgba(133, 77, 255, 0.45) 0%,
+    rgba(133, 77, 255, 0.15) 40%,
     transparent 80%
   );
   pointer-events: none;
@@ -884,6 +911,7 @@ footer::before {
   filter: blur(15px);
   z-index: -1;
   will-change: transform, opacity;
+  transform-origin: center top;
 }
 
 @media (max-width: 768px) {

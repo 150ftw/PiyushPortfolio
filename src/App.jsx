@@ -11,7 +11,7 @@ import Home from './pages/Home';
 import About from './pages/About';
 import Work from './pages/Work';
 import Expertise from './pages/Expertise';
-import Contact from './pages/Contact';
+import Contact from './pages/DirectReach';
 import Inquiry from './pages/Inquiry';
 import ThankYou from './pages/ThankYou';
 

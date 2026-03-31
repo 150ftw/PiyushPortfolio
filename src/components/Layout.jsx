@@ -132,7 +132,8 @@ const Layout = ({ children, isMobile, mouseX, mouseY }) => {
             { name: 'About', path: '/about' },
             { name: 'Work', path: '/work' },
             { name: 'Expertise', path: '/expertise' },
-            { name: 'Contact', path: '/inquiry' }
+            { name: 'Inquiry', path: '/inquiry' },
+            { name: 'Contact', path: '/contact' }
           ].map((item) => (
             <Link
               key={item.name}

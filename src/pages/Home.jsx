@@ -95,14 +95,9 @@ const Home = ({ isMobile }) => {
     { title: 'Retention Strategy',  tags: ['YouTube', 'Long-Form'],        img: '/assets/project4.png' },
   ];
 
-  useEffect(() => {
-    if (marqueeRef.current) {
-      const items = marqueeRef.current.innerHTML;
-      if (!items.includes(items + items)) { // Simple check to avoid infinite duplication if React re-renders
-        marqueeRef.current.innerHTML = items + items + items + items;
-      }
-    }
-  }, []);
+  // Marquee items duplicated for seamless loop
+  const marqueeItems = ["Brands & Creators", "✦", "Hershey's", "✦", "Tech Burner", "✦", "Netflix India", "✦", "Red Bull Gaming", "✦", "Unacademy", "✦"];
+  const duplicatedItems = [...marqueeItems, ...marqueeItems, ...marqueeItems, ...marqueeItems];
 
   return (
     <>
@@ -134,9 +129,14 @@ const Home = ({ isMobile }) => {
       </section>
 
       {/* ── Marquee ── */}
-      <motion.div className="marquee-container" initial={{ opacity: 0, filter: 'blur(10px)' }} whileInView={{ opacity: 1, filter: 'blur(0px)' }} viewport={{ once: true }} transition={{ duration: 1 }}>
-        <div className="marquee-content" ref={marqueeRef}>
-          {["Brands & Creators", "✦", "Hershey's", "✦", "Tech Burner", "✦", "Netflix India", "✦", "Red Bull Gaming", "✦", "Unacademy", "✦"].map((item, i) => (
+      <motion.div 
+        className="marquee-container" 
+        initial={{ opacity: 0 }} 
+        whileInView={{ opacity: 1 }} 
+        viewport={{ once: true }}
+      >
+        <div className="marquee-content">
+          {duplicatedItems.map((item, i) => (
             <span key={i} className="marquee-item">{item}</span>
           ))}
         </div>

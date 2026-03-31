@@ -3,16 +3,16 @@ import { motion } from 'framer-motion';
 import BookingCTA from '../components/BookingCTA';
 
 const fadeInUp = {
-  hidden: { opacity: 0, y: 30, filter: 'blur(10px)' },
-  visible: {
-    opacity: 1, y: 0, filter: 'blur(0px)',
-    transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] }
-  }
+    hidden: { opacity: 0, y: 30, filter: 'blur(10px)' },
+    visible: {
+        opacity: 1, y: 0, filter: 'blur(0px)',
+        transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] }
+    }
 };
 
 const staggerContainer = {
-  hidden: { opacity: 0 },
-  visible: { opacity: 1, transition: { staggerChildren: 0.1, delayChildren: 0.2 } }
+    hidden: { opacity: 0 },
+    visible: { opacity: 1, transition: { staggerChildren: 0.1, delayChildren: 0.2 } }
 };
 
 const About = () => {
@@ -32,29 +32,29 @@ const About = () => {
                             </p>
                         </motion.div>
 
-                        <motion.div 
-                            initial={{ opacity: 0, scale: 0.9, x: 50 }} 
-                            animate={{ opacity: 1, scale: 1, x: 0 }} 
+                        <motion.div
+                            initial={{ opacity: 0, scale: 0.9, x: 50 }}
+                            animate={{ opacity: 1, scale: 1, x: 0 }}
                             transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1], delay: 0.2 }}
                             style={{ position: 'relative' }}
                         >
                             {/* Glow behind image */}
-                            <div style={{ 
-                                position: 'absolute', 
-                                top: '50%', 
-                                left: '50%', 
+                            <div style={{
+                                position: 'absolute',
+                                top: '50%',
+                                left: '50%',
                                 transform: 'translate(-50%, -50%)',
-                                width: '120%', 
-                                height: '120%', 
+                                width: '120%',
+                                height: '120%',
                                 background: 'radial-gradient(circle, rgba(168, 85, 247, 0.15) 0%, transparent 70%)',
                                 zIndex: -1
                             }} />
 
                             <div className="senior-glass" style={{ borderRadius: '40px', overflow: 'hidden', border: '1px solid rgba(255, 255, 255, 0.1)' }}>
-                                <img 
-                                    src="/assets/piyush.png" 
-                                    alt="Piyush Rawat" 
-                                    style={{ width: '100%', height: 'auto', display: 'block', filter: 'contrast(1.1) brightness(1.05)' }} 
+                                <img
+                                    src="/assets/piyush_main.png"
+                                    alt="Piyush Rawat"
+                                    style={{ width: '100%', height: 'auto', display: 'block', filter: 'contrast(1.1) brightness(1.05)' }}
                                 />
                             </div>
                         </motion.div>
@@ -78,7 +78,7 @@ const About = () => {
                                 I combine cinematic aesthetics with data-driven editing styles used by the world's top creators to ensure your content isn't just "watched" — it's experienced.
                             </p>
                         </motion.div>
-                        
+
                         <motion.div
                             initial="hidden"
                             whileInView="visible"

@@ -210,44 +210,64 @@ const Layout = ({ children, isMobile, mouseX, mouseY }) => {
                 animate={{
                   opacity: 1,
                   x: "-50%",
-                  rotate: hoveredIndex === 0 ? -22 : hoveredIndex === 1 ? 0 : hoveredIndex === 2 ? 22 : 0,
+                  rotate: hoveredIndex === 0 ? -30 : hoveredIndex === 1 ? 0 : hoveredIndex === 2 ? 30 : 0,
                   filter: hoveredIndex === null 
-                    ? ["drop-shadow(0 0 10px rgba(133, 77, 255, 0.3))", "drop-shadow(0 0 18px rgba(133, 77, 255, 0.5))", "drop-shadow(0 0 10px rgba(133, 77, 255, 0.3))"] 
-                    : "drop-shadow(0 0 15px rgba(133, 77, 255, 0.6))"
+                    ? ["drop-shadow(0 0 12px rgba(133, 77, 255, 0.4))", "drop-shadow(0 0 20px rgba(133, 77, 255, 0.6))", "drop-shadow(0 0 12px rgba(133, 77, 255, 0.4))"] 
+                    : "drop-shadow(0 0 18px rgba(133, 77, 255, 0.7))"
                 }}
                 transition={{ 
-                  rotate: { duration: 0.6, ease: [0.16, 1, 0.3, 1] },
+                  rotate: { duration: 0.7, ease: [0.16, 1, 0.3, 1] },
                   filter: hoveredIndex === null ? { duration: 3, repeat: Infinity, ease: "easeInOut" } : { duration: 0.3 }
                 }}
               >
                 <svg width="40" height="24" viewBox="0 0 40 24" fill="none">
-                  <path d="M10 4H30V20C30 22.2091 28.2091 24 26 24H14C11.7909 24 10 22.2091 10 20V4Z" fill="#111" stroke="rgba(133, 77, 255, 0.4)" strokeWidth="1" />
+                  <path d="M10 4H30V20C30 22.2091 28.2091 24 26 24H14C11.7909 24 10 22.2091 10 20V4Z" fill="#111" stroke="rgba(133, 77, 255, 0.5)" strokeWidth="1" />
                   <rect x="12" y="2" width="16" height="4" rx="2" fill="#222" />
-                  <circle cx="20" cy="16" r="6" fill="rgba(133, 77, 255, 0.3)" filter="blur(2px)" />
+                  <circle cx="20" cy="16" r="6" fill="rgba(133, 77, 255, 0.4)" filter="blur(2px)" />
                   <circle cx="20" cy="16" r="3" fill="#fff" />
                 </svg>
                 <div className="footer-spotlight-lens-flare" />
               </motion.div>
             )}
 
-            {/* Spotlight Beam */}
+            {/* Multi-Ray Spotlight Beam */}
             {!isMobile && (
               <motion.div
                 className="footer-spotlight-beam"
                 initial={{ opacity: 0 }}
                 animate={{
-                  opacity: hoveredIndex === null ? [0.6, 0.8, 0.6] : 1,
-                  x: hoveredIndex === 0 ? '-42%' : hoveredIndex === 2 ? '42%' : '0%',
-                  rotate: hoveredIndex === 0 ? -22 : hoveredIndex === 1 ? 0 : hoveredIndex === 2 ? 22 : 0,
-                  scale: hoveredIndex === null ? [1, 1.05, 1] : 1.1
+                  opacity: 1,
+                  x: hoveredIndex === 0 ? '-46.5%' : hoveredIndex === 2 ? '46.5%' : '0%',
+                  rotate: hoveredIndex === 0 ? -30 : hoveredIndex === 1 ? 0 : hoveredIndex === 2 ? 30 : 0
                 }}
                 transition={{ 
-                  x: { duration: 0.6, ease: [0.16, 1, 0.3, 1] },
-                  rotate: { duration: 0.6, ease: [0.16, 1, 0.3, 1] },
-                  opacity: hoveredIndex === null ? { duration: 3, repeat: Infinity, ease: "easeInOut" } : { duration: 0.3 },
-                  scale: hoveredIndex === null ? { duration: 3, repeat: Infinity, ease: "easeInOut" } : { duration: 0.3 }
+                  x: { duration: 0.7, ease: [0.16, 1, 0.3, 1] },
+                  rotate: { duration: 0.7, ease: [0.16, 1, 0.3, 1] }
                 }}
-              />
+              >
+                {/* Individual Light Streaks */}
+                {[...Array(5)].map((_, i) => (
+                  <motion.div
+                    key={i}
+                    className="footer-ray-streak"
+                    animate={{
+                      opacity: hoveredIndex === null ? [0.2, 0.5, 0.2] : 1,
+                      scale: hoveredIndex === null ? [1, 1.05 + (i * 0.02), 1] : 1.1
+                    }}
+                    transition={{
+                      duration: 3 + i,
+                      repeat: Infinity,
+                      ease: "easeInOut",
+                      delay: i * 0.2
+                    }}
+                    style={{
+                      left: '50%',
+                      transform: `translateX(-50%) rotate(${(i - 2) * 2}deg)`,
+                      opacity: 0.4 + (i * 0.1)
+                    }}
+                  />
+                ))}
+              </motion.div>
             )}
 
             {[

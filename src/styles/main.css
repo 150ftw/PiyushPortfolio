@@ -869,7 +869,7 @@ footer::before {
 
 .footer-spotlight-fixture {
   position: absolute;
-  top: -80px;
+  top: -120px;
   left: 50%;
   transform: translateX(-50%);
   transform-origin: center top;
@@ -880,7 +880,7 @@ footer::before {
   align-items: center;
   z-index: 6;
   pointer-events: none;
-  filter: drop-shadow(0 0 10px rgba(133, 77, 255, 0.3));
+  filter: drop-shadow(0 0 12px rgba(133, 77, 255, 0.4));
 }
 
 .footer-spotlight-lens-flare {
@@ -897,22 +897,31 @@ footer::before {
 
 .footer-spotlight-beam {
   position: absolute;
-  top: -64px;
+  top: -104px;
   left: 50%;
-  width: 150px;
-  height: 200px;
+  width: 200px;
+  height: 240px;
+  pointer-events: none;
+  z-index: -1;
+  will-change: transform;
+  transform-origin: center top;
+}
+
+.footer-ray-streak {
+  position: absolute;
+  top: 0;
+  width: 120px;
+  height: 100%;
   background: radial-gradient(
     ellipse at top,
     rgba(133, 77, 255, 0.45) 0%,
-    rgba(133, 77, 255, 0.15) 40%,
-    transparent 80%
+    rgba(133, 77, 255, 0.1) 40%,
+    transparent 85%
   );
-  pointer-events: none;
+  filter: blur(25px);
   mix-blend-mode: color-dodge;
-  filter: blur(15px);
-  z-index: -1;
-  will-change: transform, opacity;
   transform-origin: center top;
+  will-change: transform, opacity;
 }
 
 @media (max-width: 768px) {

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Link, useLocation } from 'react-router-dom';
+import { useLenis } from 'lenis/react';
 
 const fadeInUp = {
   hidden: { opacity: 0, y: 40, filter: 'blur(15px)' },
@@ -19,6 +20,7 @@ const Layout = ({ children, isMobile, mouseX, mouseY }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const location = useLocation();
+  const lenis = useLenis();
 
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 50);
@@ -30,8 +32,12 @@ const Layout = ({ children, isMobile, mouseX, mouseY }) => {
   useEffect(() => {
     setIsMenuOpen(false);
     document.body.style.overflow = 'auto';
+    
+    if (lenis) {
+      lenis.scrollTo(0, { immediate: true });
+    }
     window.scrollTo(0, 0);
-  }, [location]);
+  }, [location, lenis]);
 
   const toggleMenu = () => {
     const next = !isMenuOpen;

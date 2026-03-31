@@ -20,30 +20,33 @@ const FluctuatingText = ({ text, delayOffset = 0 }) => {
   const chars = Array.from(text);
   
   return (
-    <>
+    <span style={{ display: 'inline-flex', flexWrap: 'wrap', justifyContent: 'center' }}>
       {chars.map((char, i) => (
         <motion.span
           key={i}
-          initial={{ opacity: 1, filter: 'blur(0px)' }}
           animate={{ 
-            opacity: [1, 0.7, 1],
-            filter: ['blur(0px)', 'blur(2px)', 'blur(0px)'],
-            scale: [1, 1.05, 1],
+            opacity: [1, 0.8, 1],
+            filter: ['blur(0px)', 'blur(1.5px)', 'blur(0px)'],
+            scale: [1, 1.02, 1],
           }}
           transition={{
-            duration: 2,
+            duration: 3,
             repeat: Infinity,
-            repeatType: "reverse",
-            repeatDelay: 4 + Math.random() * 2,
+            repeatType: "mirror",
+            repeatDelay: 3 + Math.random() * 2,
             delay: i * 0.1 + delayOffset,
             ease: "easeInOut"
           }}
-          style={{ display: 'inline-block', whiteSpace: char === ' ' ? 'pre' : 'normal' }}
+          style={{ 
+            display: 'inline-block', 
+            whiteSpace: char === ' ' ? 'pre' : 'normal',
+            willChange: 'transform, opacity, filter'
+          }}
         >
           {char}
         </motion.span>
       ))}
-    </>
+    </span>
   );
 };
 
@@ -145,24 +148,26 @@ const Layout = ({ children, isMobile, mouseX, mouseY }) => {
               ✦ &nbsp; Available for projects &nbsp; ✦
             </motion.span>
 
-            <motion.span
+            <motion.div
               className="contact-headline"
               initial={{ opacity: 0, y: 60 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 1, ease: [0.16, 1, 0.3, 1], delay: 0.1 }}
+              style={{ display: 'block' }}
             >
               <FluctuatingText text="GET IN" />
-            </motion.span>
-            <motion.span
+            </motion.div>
+            <motion.div
               className="contact-headline"
               initial={{ opacity: 0, y: 60 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 1, ease: [0.16, 1, 0.3, 1], delay: 0.2 }}
+              style={{ display: 'block' }}
             >
               <FluctuatingText text="TOUCH" delayOffset={0.5} />
-            </motion.span>
+            </motion.div>
 
             <motion.span
               className="contact-subtitle"

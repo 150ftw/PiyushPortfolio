@@ -196,7 +196,7 @@ const Layout = ({ children, isMobile, mouseX, mouseY }) => {
               viewport={{ once: true }}
               transition={{ delay: 0.6, duration: 0.8 }}
             >
-              Inquire Now : &nbsp;→
+              Inquire Now &nbsp;→
             </motion.span>
           </Link>
 

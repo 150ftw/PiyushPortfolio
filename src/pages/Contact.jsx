@@ -34,7 +34,7 @@ const Contact = () => {
                             <h3 style={{ fontSize: '1.8rem', marginBottom: '30px', fontFamily: 'Outfit' }}>Direct Communication</h3>
                             <div style={{ marginBottom: '30px' }}>
                                 <p style={{ opacity: 0.5, textTransform: 'uppercase', fontSize: '0.8rem', letterSpacing: '2px', marginBottom: '10px' }}>Email</p>
-                                <a href="mailto:hello@piyushrawat.com" style={{ fontSize: '1.4rem', color: 'white', textDecoration: 'none', fontWeight: 600 }}>Inquire Now:</a>
+                                <a href="mailto:hello@piyushrawat.com" style={{ fontSize: '1.4rem', color: 'white', textDecoration: 'none', fontWeight: 600 }}>Inquire Now</a>
                             </div>
                             <div style={{ marginBottom: '30px' }}>
                                 <p style={{ opacity: 0.5, textTransform: 'uppercase', fontSize: '0.8rem', letterSpacing: '2px', marginBottom: '10px' }}>Location</p>

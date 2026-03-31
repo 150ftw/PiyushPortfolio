@@ -16,6 +16,37 @@ const staggerContainer = {
   visible: { opacity: 1, transition: { staggerChildren: 0.1, delayChildren: 0.2 } }
 };
 
+const FluctuatingText = ({ text, delayOffset = 0 }) => {
+  const chars = Array.from(text);
+  
+  return (
+    <>
+      {chars.map((char, i) => (
+        <motion.span
+          key={i}
+          initial={{ opacity: 1, filter: 'blur(0px)' }}
+          animate={{ 
+            opacity: [1, 0.7, 1],
+            filter: ['blur(0px)', 'blur(2px)', 'blur(0px)'],
+            scale: [1, 1.05, 1],
+          }}
+          transition={{
+            duration: 2,
+            repeat: Infinity,
+            repeatType: "reverse",
+            repeatDelay: 4 + Math.random() * 2,
+            delay: i * 0.1 + delayOffset,
+            ease: "easeInOut"
+          }}
+          style={{ display: 'inline-block', whiteSpace: char === ' ' ? 'pre' : 'normal' }}
+        >
+          {char}
+        </motion.span>
+      ))}
+    </>
+  );
+};
+
 const Layout = ({ children, isMobile, mouseX, mouseY }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
@@ -121,7 +152,7 @@ const Layout = ({ children, isMobile, mouseX, mouseY }) => {
               viewport={{ once: true }}
               transition={{ duration: 1, ease: [0.16, 1, 0.3, 1], delay: 0.1 }}
             >
-              GET IN
+              <FluctuatingText text="GET IN" />
             </motion.span>
             <motion.span
               className="contact-headline"
@@ -130,7 +161,7 @@ const Layout = ({ children, isMobile, mouseX, mouseY }) => {
               viewport={{ once: true }}
               transition={{ duration: 1, ease: [0.16, 1, 0.3, 1], delay: 0.2 }}
             >
-              TOUCH
+              <FluctuatingText text="TOUCH" delayOffset={0.5} />
             </motion.span>
 
             <motion.span

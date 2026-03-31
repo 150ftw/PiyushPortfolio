@@ -208,11 +208,17 @@ const Layout = ({ children, isMobile, mouseX, mouseY }) => {
                 className="footer-spotlight-fixture"
                 initial={{ opacity: 0, x: "-50%" }}
                 animate={{
-                  opacity: hoveredIndex !== null ? 1 : 0,
+                  opacity: 1,
                   x: "-50%",
-                  rotate: hoveredIndex === 0 ? -15 : hoveredIndex === 1 ? 0 : hoveredIndex === 2 ? 15 : 0
+                  rotate: hoveredIndex === 0 ? -22 : hoveredIndex === 1 ? 0 : hoveredIndex === 2 ? 22 : 0,
+                  filter: hoveredIndex === null 
+                    ? ["drop-shadow(0 0 10px rgba(133, 77, 255, 0.3))", "drop-shadow(0 0 18px rgba(133, 77, 255, 0.5))", "drop-shadow(0 0 10px rgba(133, 77, 255, 0.3))"] 
+                    : "drop-shadow(0 0 15px rgba(133, 77, 255, 0.6))"
                 }}
-                transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+                transition={{ 
+                  rotate: { duration: 0.6, ease: [0.16, 1, 0.3, 1] },
+                  filter: hoveredIndex === null ? { duration: 3, repeat: Infinity, ease: "easeInOut" } : { duration: 0.3 }
+                }}
               >
                 <svg width="40" height="24" viewBox="0 0 40 24" fill="none">
                   <path d="M10 4H30V20C30 22.2091 28.2091 24 26 24H14C11.7909 24 10 22.2091 10 20V4Z" fill="#111" stroke="rgba(133, 77, 255, 0.4)" strokeWidth="1" />
@@ -230,11 +236,17 @@ const Layout = ({ children, isMobile, mouseX, mouseY }) => {
                 className="footer-spotlight-beam"
                 initial={{ opacity: 0 }}
                 animate={{
-                  opacity: hoveredIndex !== null ? 1 : 0,
-                  x: hoveredIndex === 0 ? '-35%' : hoveredIndex === 1 ? '0%' : hoveredIndex === 2 ? '35%' : '0%',
-                  rotate: hoveredIndex === 0 ? -15 : hoveredIndex === 1 ? 0 : hoveredIndex === 2 ? 15 : 0
+                  opacity: hoveredIndex === null ? [0.6, 0.8, 0.6] : 1,
+                  x: hoveredIndex === 0 ? '-42%' : hoveredIndex === 2 ? '42%' : '0%',
+                  rotate: hoveredIndex === 0 ? -22 : hoveredIndex === 1 ? 0 : hoveredIndex === 2 ? 22 : 0,
+                  scale: hoveredIndex === null ? [1, 1.05, 1] : 1.1
                 }}
-                transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+                transition={{ 
+                  x: { duration: 0.6, ease: [0.16, 1, 0.3, 1] },
+                  rotate: { duration: 0.6, ease: [0.16, 1, 0.3, 1] },
+                  opacity: hoveredIndex === null ? { duration: 3, repeat: Infinity, ease: "easeInOut" } : { duration: 0.3 },
+                  scale: hoveredIndex === null ? { duration: 3, repeat: Infinity, ease: "easeInOut" } : { duration: 0.3 }
+                }}
               />
             )}
 

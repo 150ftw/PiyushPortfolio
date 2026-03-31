@@ -23,10 +23,6 @@ const App = () => {
   const mouseY = useSpring(0, { stiffness: 60, damping: 25 });
 
   useEffect(() => {
-    // Scroll Reset
-    window.scrollTo(0, 0);
-    if (window.history.scrollRestoration) window.history.scrollRestoration = 'manual';
-
     const checkMobile = () => setIsMobile(window.innerWidth <= 768);
     checkMobile();
     window.addEventListener('resize', checkMobile);
@@ -41,7 +37,7 @@ const App = () => {
       window.removeEventListener('resize', checkMobile);
       window.removeEventListener('mousemove', handleMouseMove);
     };
-  }, [mouseX, mouseY]);
+  }, []);
 
   return (
     <ReactLenis root options={{ lerp: 0.1, duration: 1.5, smoothWheel: true }}>

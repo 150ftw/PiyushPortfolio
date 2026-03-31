@@ -234,14 +234,13 @@ const Layout = ({ children, isMobile, mouseX, mouseY }) => {
             {!isMobile && (
               <motion.div
                 className="footer-spotlight-beam"
-                initial={{ opacity: 0 }}
+                initial={{ opacity: 0, x: "-50%" }}
                 animate={{
                   opacity: 1,
-                  x: hoveredIndex === 0 ? '-46.5%' : hoveredIndex === 2 ? '46.5%' : '0%',
-                  rotate: hoveredIndex === 0 ? -30 : hoveredIndex === 1 ? 0 : hoveredIndex === 2 ? 30 : 0
+                  x: "-50%",
+                  rotate: hoveredIndex === 0 ? -28 : hoveredIndex === 1 ? 0 : hoveredIndex === 2 ? 28 : 0
                 }}
                 transition={{ 
-                  x: { duration: 0.7, ease: [0.16, 1, 0.3, 1] },
                   rotate: { duration: 0.7, ease: [0.16, 1, 0.3, 1] }
                 }}
               >

@@ -910,7 +910,7 @@ footer::before {
 .footer-ray-streak {
   position: absolute;
   top: 0;
-  width: 140px;
+  width: 80px;
   height: 280px;
   background: linear-gradient(
     to bottom,
@@ -919,7 +919,7 @@ footer::before {
     transparent 100%
   );
   clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
-  filter: blur(8px);
+  filter: blur(12px);
   mix-blend-mode: color-dodge;
   will-change: transform, opacity;
   pointer-events: none;

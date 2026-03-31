@@ -244,25 +244,24 @@ const Layout = ({ children, isMobile, mouseX, mouseY }) => {
                   rotate: { duration: 0.7, ease: [0.16, 1, 0.3, 1] }
                 }}
               >
-                {/* Triangular Light Cones (Fanned Cluster) */}
+                {/* Lens-Corrected Atmospheric Rays (Mist Cluster) */}
                 {[...Array(5)].map((_, i) => (
                   <motion.div
                     key={i}
                     className="footer-ray-streak"
+                    initial={{ x: "-50%", rotate: (i - 2) * 7 }}
                     animate={{
-                      opacity: hoveredIndex === null ? [0.3, 0.6, 0.3] : 0.8,
-                      scaleY: hoveredIndex === null ? [1, 1.05, 1] : 1.1,
-                      scaleX: hoveredIndex === null ? [1, 1.1, 1] : 1.2
+                      opacity: hoveredIndex === null ? [0.2, 0.4, 0.2] : 0.6,
+                      scaleY: hoveredIndex === null ? [1, 1.1, 1] : 1.15
                     }}
                     transition={{
-                      duration: 3 + i,
+                      duration: 4 + i,
                       repeat: Infinity,
                       ease: "easeInOut",
-                      delay: i * 0.2
+                      delay: i * 0.3
                     }}
                     style={{
                       left: '50%',
-                      transform: `translateX(-50%) rotate(${(i - 2) * 5}deg)`,
                       transformOrigin: 'top center'
                     }}
                   />

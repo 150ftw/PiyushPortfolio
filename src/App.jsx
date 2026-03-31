@@ -1,5 +1,37 @@
 import React, { useEffect, useState, useRef } from 'react';
+import { motion } from 'framer-motion';
 import Beams from './components/Beams';
+
+// Animation Variants
+const fadeInUp = {
+  hidden: { opacity: 0, y: 40 },
+  visible: { 
+    opacity: 1, 
+    y: 0,
+    transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] }
+  }
+};
+
+const staggerContainer = {
+  hidden: { opacity: 0 },
+  visible: {
+    opacity: 1,
+    transition: {
+      staggerChildren: 0.15,
+      delayChildren: 0.2
+    }
+  }
+};
+
+const textReveal = {
+  hidden: { filter: 'blur(10px)', opacity: 0, y: 20 },
+  visible: {
+    filter: 'blur(0px)',
+    opacity: 1,
+    y: 0,
+    transition: { duration: 1, ease: [0.16, 1, 0.3, 1] }
+  }
+};
 
 const App = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -13,21 +45,6 @@ const App = () => {
     };
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
-
-  // Intersection Observer for reveal animations
-  useEffect(() => {
-    const revealElements = document.querySelectorAll('.reveal');
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('active');
-        }
-      });
-    }, { threshold: 0.15 });
-
-    revealElements.forEach(el => observer.observe(el));
-    return () => observer.disconnect();
   }, []);
 
   // Marquee Duplication logic
@@ -58,26 +75,32 @@ const App = () => {
       <nav className={isScrolled ? 'scrolled' : ''}>
         <div className="nav-name">Piyush Rawat</div>
         <div className="menu-toggle" onClick={toggleMenu}>
-          <div className="menu-line" style={isMenuOpen ? { transform: 'translateY(5px) rotate(45deg)' } : {}}></div>
-          <div className="menu-line" style={isMenuOpen ? { transform: 'translateY(-5px) rotate(-45deg)' } : {}}></div>
+          <div className="menu-line" style={isMenuOpen ? { transform: 'translateY(5px) rotate(45deg)', background: 'white' } : { background: 'white' }}></div>
+          <div className="menu-line" style={isMenuOpen ? { transform: 'translateY(-5px) rotate(-45deg)', background: 'white' } : { background: 'white' }}></div>
         </div>
       </nav>
 
       {/* Menu Overlay */}
       <div className={`menu-overlay ${isMenuOpen ? 'active' : ''}`}>
-        <div className="menu-links">
-          <a href="#" className="menu-item active" onClick={closeMenu}>Home</a>
-          <a href="#about" class="menu-item" onClick={closeMenu}>About</a>
-          <a href="#projects" class="menu-item" onClick={closeMenu}>Work</a>
-          <a href="#reviews" class="menu-item" onClick={closeMenu}>Testimonials</a>
-          <a href="#footer" class="menu-item" onClick={closeMenu}>Contact</a>
-        </div>
-        <div className="social-links">
-          <a href="#" className="social-item">IG</a>
-          <a href="#" className="social-item">TW</a>
-          <a href="#" className="social-item">BE</a>
-          <a href="#" className="social-item">YT</a>
-        </div>
+        <motion.div 
+          className="menu-links"
+          initial="hidden"
+          animate={isMenuOpen ? "visible" : "hidden"}
+          variants={staggerContainer}
+        >
+          {['Home', 'About', 'Work', 'Testimonials', 'Contact'].map((item, i) => (
+            <motion.a 
+              key={item}
+              href={item === 'Home' ? '#' : `#${item.toLowerCase()}`}
+              className="menu-item"
+              variants={fadeInUp}
+              onClick={closeMenu}
+              whileHover={{ x: 20, color: 'var(--accent-purple)' }}
+            >
+              {item}
+            </motion.a>
+          ))}
+        </motion.div>
       </div>
 
       {/* Hero Section */}
@@ -95,22 +118,46 @@ const App = () => {
           />
         </div>
         <div className="container hero-content" style={{ position: 'relative', zIndex: 1 }}>
-          <h1 className="hero-title reveal">LET'S CREATE <br /> VIDEOS PEOPLE <br /> <span className="text-accent">ACTUALLY WATCH</span></h1>
-          <div className="hero-stats reveal">
-            <div className="stat-item">
+          <motion.h1 
+            className="hero-title"
+            initial="hidden"
+            animate="visible"
+            variants={staggerContainer}
+          >
+            {["LET'S CREATE", "VIDEOS PEOPLE", "ACTUALLY WATCH"].map((line, i) => (
+              <motion.span key={i} style={{ display: 'block' }} variants={textReveal}>
+                {line.includes("ACTUALLY WATCH") ? (
+                  <>ACTUALLY <span className="text-accent">WATCH</span></>
+                ) : line}
+              </motion.span>
+            ))}
+          </motion.h1>
+          
+          <motion.div 
+            className="hero-stats"
+            initial="hidden"
+            animate="visible"
+            variants={staggerContainer}
+          >
+            <motion.div className="stat-item" variants={fadeInUp}>
               <span className="stat-value">500+</span>
               <span className="stat-label">Project <br /> Completions</span>
-            </div>
-            <div className="stat-item">
+            </motion.div>
+            <motion.div className="stat-item" variants={fadeInUp}>
               <span className="stat-value">100%</span>
               <span className="stat-label">Client <br /> Satisfaction</span>
-            </div>
-          </div>
+            </motion.div>
+          </motion.div>
         </div>
       </section>
 
       {/* Marquee Section */}
-      <div className="marquee-container">
+      <motion.div 
+        className="marquee-container"
+        initial={{ opacity: 0 }}
+        whileInView={{ opacity: 1 }}
+        viewport={{ once: true }}
+      >
         <div className="marquee-content" ref={marqueeRef}>
           <span className="marquee-item">Brands & Creators I have worked with</span>
           <span className="marquee-item">✦</span>
@@ -125,128 +172,171 @@ const App = () => {
           <span className="marquee-item">Unacademy</span>
           <span className="marquee-item">✦</span>
         </div>
-      </div>
+      </motion.div>
 
       {/* About Section */}
-      <section className="section-padding reveal" id="about">
+      <section className="section-padding" id="about">
         <div className="container" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '60px', alignItems: 'start' }}>
-          <h2 className="section-title">Clean <br /> Engaging <br /> <span className="text-accent">High-Retention</span></h2>
-          <div className="about-text">
-            <p style={{ marginBottom: '30px' }}>
+          <motion.h2 
+            className="section-title"
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-100px" }}
+            variants={fadeInUp}
+          >
+            Clean <br /> Engaging <br /> <span className="text-accent">High-Retention</span>
+          </motion.h2>
+          <motion.div 
+            className="about-text"
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-100px" }}
+            variants={staggerContainer}
+          >
+            <motion.p style={{ marginBottom: '30px' }} variants={fadeInUp}>
               I am Piyush Rawat, a video editor focused on creating clean, engaging, and high-retention content. I work with creators and brands to transform raw footage into polished videos that capture attention and keep it.
-            </p>
-            <p style={{ marginBottom: '30px', fontSize: '0.9rem', letterSpacing: '1px', opacity: 0.7 }}>
+            </motion.p>
+            <motion.p style={{ marginBottom: '30px', fontSize: '0.9rem', letterSpacing: '1px', opacity: 0.7 }} variants={fadeInUp}>
               LOCATION: GHAZIABAD, INDIA <br />
               AVAILABILITY: OPEN FOR FREELANCE PROJECTS
-            </p>
-            <a href="#footer" style={{ fontFamily: 'Outfit', border: '1px solid white', padding: '18px 40px', display: 'inline-flex', alignItems: 'center', gap: '15px', textTransform: 'uppercase', fontWeight: 700, fontSize: '1rem', borderRadius: '50px' }}>
+            </motion.p>
+            <motion.a 
+              href="#footer" 
+              variants={fadeInUp}
+              whileHover={{ scale: 1.05, backgroundColor: 'white', color: 'black' }}
+              style={{ fontFamily: 'Outfit', border: '1px solid white', padding: '18px 40px', display: 'inline-flex', alignItems: 'center', gap: '15px', textTransform: 'uppercase', fontWeight: 700, fontSize: '1rem', borderRadius: '50px', transition: '0.3s' }}
+            >
               Let's Talk <span>→</span>
-            </a>
-          </div>
+            </motion.a>
+          </motion.div>
         </div>
       </section>
 
       {/* Projects Grid */}
       <section className="projects-section section-padding" id="projects">
         <div className="container">
-          <h2 className="section-title" style={{ marginBottom: '40px' }}>Selected <br /> <span className="text-accent">Work</span></h2>
-          <div className="projects-grid">
-            {/* Project 1 */}
-            <div className="project-card reveal">
-              <div className="project-img-wrapper">
-                <img src="/assets/project1.png" alt="Hershey's Campaign" className="project-img" />
-                <div className="play-hint"></div>
-              </div>
-              <div className="project-info">
-                <h3 className="project-title">Hershey's Campaign</h3>
-                <div className="project-tags">
-                  <span className="tag">Commercial</span>
-                  <span className="tag">Brand Film</span>
+          <motion.h2 
+            className="section-title" 
+            style={{ marginBottom: '40px' }}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            variants={fadeInUp}
+          >
+            Selected <br /> <span className="text-accent">Work</span>
+          </motion.h2>
+          <motion.div 
+            className="projects-grid"
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-50px" }}
+            variants={staggerContainer}
+          >
+            {[
+              { title: "Hershey's Campaign", tags: ["Commercial", "Brand Film"], img: "/assets/project1.png" },
+              { title: "Valorant Montage", tags: ["Gaming", "Cinematic"], img: "/assets/project2.png" },
+              { title: "2024 Showreel", tags: ["Highlights", "Official"], img: "/assets/project3.png" },
+              { title: "Retention Strategy", tags: ["YouTube", "Long-Form"], img: "/assets/project4.png" }
+            ].map((proj, i) => (
+              <motion.div 
+                key={i} 
+                className="project-card"
+                variants={fadeInUp}
+                whileHover={{ y: -10 }}
+              >
+                <div className="project-img-wrapper">
+                  <motion.img 
+                    src={proj.img} 
+                    alt={proj.title} 
+                    className="project-img" 
+                    whileHover={{ scale: 1.1 }}
+                    transition={{ duration: 0.6 }}
+                  />
+                  <div className="play-hint"></div>
                 </div>
-              </div>
-            </div>
-            {/* Project 2 */}
-            <div className="project-card reveal">
-              <div className="project-img-wrapper">
-                <img src="/assets/project2.png" alt="Valorant Montage" className="project-img" />
-                <div className="play-hint"></div>
-              </div>
-              <div className="project-info">
-                <h3 className="project-title">Valorant Montage</h3>
-                <div className="project-tags">
-                  <span className="tag">Gaming</span>
-                  <span className="tag">Cinematic</span>
+                <div className="project-info">
+                  <h3 className="project-title">{proj.title}</h3>
+                  <div className="project-tags">
+                    {proj.tags.map(tag => <span key={tag} className="tag">{tag}</span>)}
+                  </div>
                 </div>
-              </div>
-            </div>
-            {/* Project 3 */}
-            <div className="project-card reveal">
-              <div className="project-img-wrapper">
-                <img src="/assets/project3.png" alt="2024 Showreel" className="project-img" />
-                <div className="play-hint"></div>
-              </div>
-              <div className="project-info">
-                <h3 className="project-title">2024 Showreel</h3>
-                <div className="project-tags">
-                  <span className="tag">Highlights</span>
-                  <span className="tag">Official</span>
-                </div>
-              </div>
-            </div>
-            {/* Project 4 */}
-            <div className="project-card reveal">
-              <div className="project-img-wrapper">
-                <img src="/assets/project4.png" alt="Retention Strategy" className="project-img" />
-                <div className="play-hint"></div>
-              </div>
-              <div className="project-info">
-                <h3 className="project-title">Retention Strategy</h3>
-                <div className="project-tags">
-                  <span className="tag">YouTube</span>
-                  <span className="tag">Long-Form</span>
-                </div>
-              </div>
-            </div>
-          </div>
+              </motion.div>
+            ))}
+          </motion.div>
         </div>
       </section>
 
       {/* Expertise Section */}
-      <section className="section-padding reveal">
+      <section className="section-padding">
         <div className="container" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '60px' }}>
-          <h2 className="section-title">Core <br /> Expertise</h2>
-          <div className="expertise-list">
-            <div style={{ marginBottom: '40px' }}>
-              <h4 style={{ fontFamily: 'Outfit', color: 'var(--accent-purple)', marginBottom: '5px' }}>SHORT-FORM CONTENT</h4>
-              <p className="text-muted" style={{ fontSize: '0.95rem' }}>Viral-ready Reels and Shorts optimized for retention and audience engagement.</p>
-            </div>
-            <div style={{ marginBottom: '40px' }}>
-              <h4 style={{ fontFamily: 'Outfit', color: 'var(--accent-purple)', marginBottom: '5px' }}>YOUTUBE EDITING</h4>
-              <p className="text-muted" style={{ fontSize: '0.95rem' }}>Advanced storytelling and dynamic pacing for creators looking to scale their channels.</p>
-            </div>
-            <div style={{ marginBottom: '40px' }}>
-              <h4 style={{ fontFamily: 'Outfit', color: 'var(--accent-purple)', marginBottom: '5px' }}>COLOR GRADING</h4>
-              <p className="text-muted" style={{ fontSize: '0.95rem' }}>High-end color palettes in DaVinci Resolve that establish mood and cinematic quality.</p>
-            </div>
-            <div style={{ marginBottom: '40px' }}>
-              <h4 style={{ fontFamily: 'Outfit', color: 'var(--accent-purple)', marginBottom: '5px' }}>MOTION GRAPHICS</h4>
-              <p className="text-muted" style={{ fontSize: '0.95rem' }}>Sophisticated After Effects animations, title designs, and kinetic typography.</p>
-            </div>
-          </div>
+          <motion.h2 
+            className="section-title"
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            variants={fadeInUp}
+          >
+            Core <br /> Expertise
+          </motion.h2>
+          <motion.div 
+            className="expertise-list"
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true }}
+            variants={staggerContainer}
+          >
+            {[
+              { title: "SHORT-FORM CONTENT", desc: "Viral-ready Reels and Shorts optimized for retention." },
+              { title: "YOUTUBE EDITING", desc: "Advanced storytelling and dynamic pacing for creators." },
+              { title: "COLOR GRADING", desc: "High-end color palettes that establish cinematic quality." },
+              { title: "MOTION GRAPHICS", desc: "Kinetic typography and After Effects animations." }
+            ].map((item, i) => (
+              <motion.div key={i} style={{ marginBottom: '40px' }} variants={fadeInUp}>
+                <h4 style={{ fontFamily: 'Outfit', color: 'var(--accent-purple)', marginBottom: '5px' }}>{item.title}</h4>
+                <p className="text-muted" style={{ fontSize: '0.95rem' }}>{item.desc}</p>
+              </motion.div>
+            ))}
+          </motion.div>
         </div>
       </section>
 
       {/* Footer */}
       <footer id="footer">
         <div className="container footer-content">
-          <a href="mailto:hello@piyushrawat.com" className="contact-link reveal">
+          <motion.a 
+            href="mailto:hello@piyushrawat.com" 
+            className="contact-link"
+            initial={{ opacity: 0, y: 100 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
+          >
             GET IN TOUCH
-            <span>START YOUR PROJECT TODAY →</span>
-          </a>
-          <div className="reveal" style={{ marginTop: '40px', fontFamily: 'Inria Serif', opacity: 0.6 }}>
+            <motion.span 
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              transition={{ delay: 0.5 }}
+            >
+              START YOUR PROJECT TODAY →
+            </motion.span>
+          </motion.a>
+          <motion.div 
+            style={{ marginTop: '40px', fontFamily: 'Inria Serif', opacity: 0.6 }}
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 0.6 }}
+            viewport={{ once: true }}
+          >
             GHAZIABAD, INDIA | AVAILABLE WORLDWIDE
-          </div>
-          <p className="text-muted reveal" style={{ marginTop: '40px', fontWeight: 600, letterSpacing: '2px' }}>&copy; 2024 PIYUSH RAWAT. VIDEO EDITOR.</p>
+          </motion.div>
+          <motion.p 
+            className="text-muted" 
+            style={{ marginTop: '40px', fontWeight: 600, letterSpacing: '2px' }}
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+          >
+            &copy; {new Date().getFullYear()} PIYUSH RAWAT. VIDEO EDITOR.
+          </motion.p>
         </div>
       </footer>
     </div>

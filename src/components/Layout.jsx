@@ -73,6 +73,7 @@ const FluctuatingText = ({ text, delayOffset = 0 }) => {
 const Layout = ({ children, isMobile, mouseX, mouseY }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  const [hoveredIndex, setHoveredIndex] = useState(null);
   const location = useLocation();
   const lenis = useLenis();
 
@@ -200,10 +201,40 @@ const Layout = ({ children, isMobile, mouseX, mouseY }) => {
             </motion.span>
           </Link>
 
-          <div className="footer-meta">
-            <div>Ghaziabad, India</div>
-            {!isMobile && <div>Available Worldwide</div>}
-            <div>© {new Date().getFullYear()} Piyush Rawat</div>
+          <div className="footer-meta" style={{ position: 'relative', marginTop: isMobile ? '60px' : '100px' }}>
+            {/* Spotlight Beam */}
+            {!isMobile && (
+              <motion.div
+                className="footer-spotlight-beam"
+                initial={{ opacity: 0 }}
+                animate={{
+                  opacity: hoveredIndex !== null ? 1 : 0,
+                  x: hoveredIndex === 0 ? '-35%' : hoveredIndex === 1 ? '0%' : hoveredIndex === 2 ? '35%' : '0%',
+                  rotate: hoveredIndex === 0 ? -15 : hoveredIndex === 1 ? 0 : hoveredIndex === 2 ? 15 : 0
+                }}
+                transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+              />
+            )}
+
+            {[
+              "Ghaziabad, India",
+              ...(!isMobile ? ["Available Worldwide"] : []),
+              `© ${new Date().getFullYear()} Piyush Rawat`
+            ].map((text, i) => (
+              <motion.div
+                key={i}
+                onMouseEnter={() => setHoveredIndex(i)}
+                onMouseLeave={() => setHoveredIndex(null)}
+                animate={{
+                  opacity: hoveredIndex === i ? 1 : 0.4,
+                  scale: hoveredIndex === i ? 1.05 : 1,
+                  color: hoveredIndex === i ? "#fff" : "rgba(255,255,255,0.8)"
+                }}
+                style={{ cursor: 'default', transition: 'color 0.3s ease' }}
+              >
+                {text}
+              </motion.div>
+            ))}
           </div>
         </div>
       </footer>

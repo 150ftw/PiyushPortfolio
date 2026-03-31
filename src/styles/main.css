@@ -860,10 +860,30 @@ footer::before {
   justify-content: space-between;
   gap: 20px;
   width: 100%;
-  opacity: 0.4;
+  position: relative;
   font-size: 0.85rem;
   letter-spacing: 1px;
   text-transform: uppercase;
+  z-index: 5;
+}
+
+.footer-spotlight-beam {
+  position: absolute;
+  top: -120px;
+  left: 50%;
+  width: 150px;
+  height: 200px;
+  background: radial-gradient(
+    ellipse at top,
+    rgba(133, 77, 255, 0.4) 0%,
+    rgba(133, 77, 255, 0.1) 40%,
+    transparent 80%
+  );
+  pointer-events: none;
+  mix-blend-mode: color-dodge;
+  filter: blur(15px);
+  z-index: -1;
+  will-change: transform, opacity;
 }
 
 @media (max-width: 768px) {

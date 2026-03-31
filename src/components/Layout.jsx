@@ -210,7 +210,7 @@ const Layout = ({ children, isMobile, mouseX, mouseY }) => {
                 animate={{
                   opacity: 1,
                   x: "-50%",
-                  rotate: hoveredIndex === 0 ? -48 : hoveredIndex === 1 ? 0 : hoveredIndex === 2 ? 48 : 0,
+                  rotate: hoveredIndex === 0 ? 68 : hoveredIndex === 1 ? 0 : hoveredIndex === 2 ? -68 : 0,
                   filter: hoveredIndex === null 
                     ? ["drop-shadow(0 0 12px rgba(133, 77, 255, 0.4))", "drop-shadow(0 0 20px rgba(133, 77, 255, 0.6))", "drop-shadow(0 0 12px rgba(133, 77, 255, 0.4))"] 
                     : "drop-shadow(0 0 18px rgba(133, 77, 255, 0.7))"
@@ -238,10 +238,12 @@ const Layout = ({ children, isMobile, mouseX, mouseY }) => {
                 animate={{
                   opacity: 1,
                   x: "-50%",
-                  rotate: hoveredIndex === 0 ? 48 : hoveredIndex === 1 ? 0 : hoveredIndex === 2 ? -48 : 0
+                  rotate: hoveredIndex === 0 ? 68 : hoveredIndex === 1 ? 0 : hoveredIndex === 2 ? -68 : 0,
+                  scaleY: hoveredIndex === 0 || hoveredIndex === 2 ? 1.35 : 1
                 }}
                 transition={{ 
-                  rotate: { duration: 0.7, ease: [0.16, 1, 0.3, 1] }
+                  rotate: { duration: 0.7, ease: [0.16, 1, 0.3, 1] },
+                  scaleY: { duration: 0.7, ease: [0.16, 1, 0.3, 1] }
                 }}
               >
                 {/* Lens-Corrected Atmospheric Rays (Mist Cluster) */}

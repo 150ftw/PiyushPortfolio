@@ -867,16 +867,18 @@ footer::before {
   z-index: 5;
 }
 
+.footer-spotlight-fix {
+  position: absolute;
+}
+
 .footer-spotlight-fixture {
   position: absolute;
   top: -200px;
   left: 50%;
-  transform: translateX(-50%);
-  transform-origin: center top;
-  width: 40px;
-  height: 24px;
+  width: 0;
+  height: 0;
   display: flex;
-  flex-direction: column;
+  justify-content: center;
   align-items: center;
   z-index: 6;
   pointer-events: none;
@@ -899,8 +901,8 @@ footer::before {
   position: absolute;
   top: -184px;
   left: 50%;
-  width: 200px;
-  height: 240px;
+  width: 0;
+  height: 0;
   pointer-events: none;
   z-index: -1;
   will-change: transform;

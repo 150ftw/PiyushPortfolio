@@ -219,14 +219,16 @@ const Layout = ({ children, isMobile, mouseX, mouseY }) => {
                   rotate: { duration: 0.7, ease: [0.16, 1, 0.3, 1] },
                   filter: hoveredIndex === null ? { duration: 3, repeat: Infinity, ease: "easeInOut" } : { duration: 0.3 }
                 }}
+                style={{ position: 'absolute' }}
               >
-                <svg width="40" height="24" viewBox="0 0 40 24" fill="none">
-                  <path d="M10 4H30V20C30 22.2091 28.2091 24 26 24H14C11.7909 24 10 22.2091 10 20V4Z" fill="#111" stroke="rgba(133, 77, 255, 0.5)" strokeWidth="1" />
-                  <rect x="12" y="2" width="16" height="4" rx="2" fill="#222" />
-                  <circle cx="20" cy="16" r="6" fill="rgba(133, 77, 255, 0.4)" filter="blur(2px)" />
-                  <circle cx="20" cy="16" r="3" fill="#fff" />
+                <svg width="40" height="24" viewBox="0 0 40 24" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ position: 'absolute', left: '50%', transform: 'translateX(-50%)' }}>
+                  <path d="M0 4C0 1.79086 1.79086 0 4 0H36C38.2091 0 40 1.79086 40 4V10C40 12.2091 38.2091 14 36 14H4C1.79086 14 0 12.2091 0 10V4Z" fill="#1A1A1A"/>
+                  <rect x="4" y="2" width="32" height="10" rx="2" fill="#333333"/>
+                  <circle cx="20" cy="8" r="5" fill="#4B4B4B"/>
+                  <circle cx="20" cy="8" r="3" fill="white" className="spotlight-lens-glow" />
+                  <path d="M10 14L8 24M30 14L32 24" stroke="#1A1A1A" strokeWidth="2" strokeLinecap="round"/>
                 </svg>
-                <div className="footer-spotlight-lens-flare" />
+                <div className="footer-spotlight-lens-flare" style={{ position: 'absolute', left: '50%', transform: 'translateX(-50%)' }} />
               </motion.div>
             )}
 

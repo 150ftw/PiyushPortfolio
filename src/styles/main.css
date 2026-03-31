@@ -253,16 +253,10 @@ body {
   transform: translateY(100%);
 }
 
-/* Horizontal Scroll Container */
+/* ── Horizontal Scroll Container ── */
 .horizontal-scroll-section {
   position: relative;
-  height: 600vh; /* Increased vertical track for horizontal scroll */
-}
-
-@media (max-width: 768px) {
-  .horizontal-scroll-section {
-    height: auto !important;
-  }
+  /* height is set inline via JSX (600vh desktop / auto mobile) */
 }
 
 .sticky-wrapper {
@@ -275,42 +269,18 @@ body {
   align-items: center;
 }
 
-@media (max-width: 768px) {
-  .sticky-wrapper {
-    position: relative;
-    height: auto;
-    overflow: visible;
-    display: block;
-    padding: 60px 0;
-  }
-}
-
 .horizontal-content {
   display: flex;
-  gap: 15vw;
-  padding: 0 10vw;
+  gap: 6vw;
+  padding: 0 8vw;
   align-items: center;
   will-change: transform;
+  flex-wrap: nowrap;
 }
 
-@media (max-width: 768px) {
-  .horizontal-content {
-    flex-direction: column;
-    gap: 60px;
-    padding: 0 20px;
-    transform: none !important;
-  }
-}
-
+/* ── Core Expertise Sticky Stack ── */
 .expertise-stack-container {
-  height: 500vh; /* Each card gets ~100vh of scroll distance */
   position: relative;
-}
-
-@media (max-width: 768px) {
-  .expertise-stack-container {
-    height: auto;
-  }
 }
 
 .expertise-stack-sticky {
@@ -318,10 +288,7 @@ body {
   top: 0;
   height: 100vh;
   display: grid;
-  grid-template-columns: 1fr 1fr; /* Split Title | Cards */
-  align-items: center;
-  padding: 0 10vw;
-  grid-template-columns: 1fr 1fr; /* Side-by-side: Title | Cards */
+  grid-template-columns: 1fr 1fr;
   align-items: center;
   padding: 0 8vw;
   overflow: hidden;
@@ -332,26 +299,25 @@ body {
   padding-right: 5vw;
 }
 
+/* Right column: fixed-height box that clips overflow */
 .expertise-cards-stack {
   position: relative;
-  height: 600px; /* Fixed window for the relative stacking cards */
+  height: 320px;
   width: 100%;
+  overflow: hidden;
 }
 
+/* Card itself — positioned by Framer Motion (top: 50%, translateY(-50%)) */
 .expertise-card-frame {
-  position: absolute;
-  top: 0;
-  left: 0;
   width: 100%;
-  background: rgba(15, 15, 15, 0.8);
+  background: rgba(15, 15, 15, 0.85);
   backdrop-filter: blur(20px);
-  padding: 40px;
+  padding: 44px;
   border-radius: 20px;
   border: 1px solid rgba(255, 255, 255, 0.1);
   box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5);
 }
 
-/* Mobile Fallback: Full-width stacked */
 @media (max-width: 768px) {
   .expertise-stack-sticky {
     display: block;

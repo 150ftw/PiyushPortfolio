@@ -210,13 +210,11 @@ const Layout = ({ children, isMobile, mouseX, mouseY }) => {
                 animate={{
                   opacity: 1,
                   x: "-50%",
-                  rotate: hoveredIndex === 0 ? 68 : hoveredIndex === 1 ? 0 : hoveredIndex === 2 ? -68 : 0,
-                  filter: hoveredIndex === null
-                    ? ["drop-shadow(0 0 12px rgba(133, 77, 255, 0.4))", "drop-shadow(0 0 20px rgba(133, 77, 255, 0.6))", "drop-shadow(0 0 12px rgba(133, 77, 255, 0.4))"]
+                  filter: hoveredIndex === null 
+                    ? ["drop-shadow(0 0 12px rgba(133, 77, 255, 0.4))", "drop-shadow(0 0 20px rgba(133, 77, 255, 0.6))", "drop-shadow(0 0 12px rgba(133, 77, 255, 0.4))"] 
                     : "drop-shadow(0 0 18px rgba(133, 77, 255, 0.7))"
                 }}
-                transition={{
-                  rotate: { duration: 0.7, ease: [0.16, 1, 0.3, 1] },
+                transition={{ 
                   filter: hoveredIndex === null ? { duration: 3, repeat: Infinity, ease: "easeInOut" } : { duration: 0.3 }
                 }}
                 style={{ position: 'absolute' }}

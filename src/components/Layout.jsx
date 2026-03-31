@@ -114,10 +114,11 @@ const Layout = ({ children, isMobile, mouseX, mouseY }) => {
           className="menu-toggle"
           onClick={toggleMenu}
           whileTap={{ scale: 0.9 }}
-          style={{ cursor: 'pointer', zIndex: 1020, pointerEvents: 'all' }}
+          style={{ cursor: 'pointer', zIndex: 1020, pointerEvents: 'all', gap: '6px' }}
         >
-          <div className="menu-line" style={isMenuOpen ? { transform: 'translateY(5px) rotate(45deg)', background: 'white' } : { background: 'white' }} />
-          <div className="menu-line" style={isMenuOpen ? { transform: 'translateY(-5px) rotate(-45deg)', background: 'white' } : { background: 'white' }} />
+          <div className="menu-line" style={isMenuOpen ? { transform: 'translateY(8px) rotate(45deg)', background: 'white' } : { background: 'white' }} />
+          <div className="menu-line" style={isMenuOpen ? { opacity: 0, background: 'white' } : { background: 'white' }} />
+          <div className="menu-line" style={isMenuOpen ? { transform: 'translateY(-8px) rotate(-45deg)', background: 'white' } : { background: 'white' }} />
         </motion.div>
       </nav>
 
@@ -126,32 +127,87 @@ const Layout = ({ children, isMobile, mouseX, mouseY }) => {
         className={`menu-overlay ${isMenuOpen ? 'active' : ''}`}
         style={{ pointerEvents: isMenuOpen ? 'all' : 'none', visibility: isMenuOpen ? 'visible' : 'hidden', opacity: isMenuOpen ? 1 : 0, zIndex: 1010 }}
       >
-        <motion.div className="menu-links" initial="hidden" animate={isMenuOpen ? 'visible' : 'hidden'} variants={staggerContainer}>
-          {[
-            { name: 'Home', path: '/' },
-            { name: 'About', path: '/about' },
-            { name: 'Work', path: '/work' },
-            { name: 'Expertise', path: '/expertise' },
-            { name: 'Inquiry', path: '/inquiry' },
-            { name: 'Contact', path: '/contact' }
-          ].map((item) => (
-            <Link
-              key={item.name}
-              to={item.path}
-              className="menu-item"
-              style={{ textDecoration: 'none' }}
-              onClick={() => setIsMenuOpen(false)}
-            >
-              <motion.span
-                variants={fadeInUp}
-                whileHover={{ x: 20, color: 'var(--accent-purple)', skewX: -5 }}
-                style={{ display: 'block' }}
+        <div className="container" style={{ height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+          <div className="menu-grid" style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1.2fr 0.8fr', alignItems: 'center', gap: '40px' }}>
+            <motion.div className="menu-links" initial="hidden" animate={isMenuOpen ? 'visible' : 'hidden'} variants={staggerContainer} style={{ textAlign: 'left', alignItems: 'flex-start' }}>
+              {[
+                { name: 'Home', path: '/', sub: 'Back to Start' },
+                { name: 'About', path: '/about', sub: 'The vision behind' },
+                { name: 'Work', path: '/work', sub: 'Selected archives' },
+                { name: 'Expertise', path: '/expertise', sub: 'The technical stack' },
+                { name: 'Inquiry', path: '/inquiry', sub: 'Start a project' },
+                { name: 'Contact', path: '/contact', sub: 'Direct reach' }
+              ].map((item, idx) => (
+                <Link
+                  key={item.name}
+                  to={item.path}
+                  className="menu-item-wrapper"
+                  style={{ textDecoration: 'none', display: 'flex', alignItems: 'baseline', gap: '30px', marginBottom: '10px' }}
+                  onClick={() => setIsMenuOpen(false)}
+                >
+                  <span className="menu-index" style={{ fontSize: '1rem', color: 'var(--accent-purple)', fontWeight: 600, opacity: 0.6 }}>
+                    {String(idx + 1).padStart(2, '0')}
+                  </span>
+                  <div style={{ display: 'flex', flexDirection: 'column' }}>
+                    <motion.span
+                      className="menu-item"
+                      variants={fadeInUp}
+                      whileHover={{ x: 15, color: 'var(--accent-purple)' }}
+                      style={{ fontSize: 'clamp(2.5rem, 6vw, 4rem)', lineHeight: '1.1' }}
+                    >
+                      {item.name}
+                    </motion.span>
+                    <span className="menu-sub" style={{ fontSize: '0.8rem', opacity: 0.4, textTransform: 'uppercase', letterSpacing: '2px', marginLeft: '2px', marginTop: '5px' }}>
+                      {item.sub}
+                    </span>
+                  </div>
+                </Link>
+              ))}
+            </motion.div>
+
+            {!isMobile && (
+              <motion.div 
+                className="menu-visual-side"
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={isMenuOpen ? { opacity: 0.05, scale: 1 } : { opacity: 0, scale: 0.8 }}
+                transition={{ duration: 1.2, ease: "easeOut" }}
+                style={{ position: 'relative', pointerEvents: 'none' }}
               >
-                {item.name}
-              </motion.span>
-            </Link>
-          ))}
-        </motion.div>
+                <h2 style={{ fontSize: '30vw', fontWeight: 900, fontFamily: 'Outfit', lineHeight: 1, margin: 0 }}>
+                  PR
+                </h2>
+              </motion.div>
+            )}
+          </div>
+
+          {/* Socials / Status */}
+          <motion.div 
+            className="menu-footer" 
+            initial={{ opacity: 0, y: 30 }}
+            animate={isMenuOpen ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
+            transition={{ delay: 0.6 }}
+            style={{ 
+              marginTop: '80px', 
+              paddingTop: '40px', 
+              borderTop: '1px solid rgba(255,255,255,0.05)',
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              flexWrap: 'wrap',
+              gap: '20px'
+            }}
+          >
+            <div style={{ display: 'flex', gap: '30px' }}>
+              <a href="https://www.instagram.com/ig_rouf/" target="_blank" rel="noopener noreferrer" className="social-mini">Instagram</a>
+              <a href="https://www.linkedin.com/in/piyushrawat/" target="_blank" rel="noopener noreferrer" className="social-mini">LinkedIn</a>
+              <a href="https://www.youtube.com/channel/UCE-NP3ZWAo2O1NyDoL039rA" target="_blank" rel="noopener noreferrer" className="social-mini">YouTube</a>
+            </div>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+              <span style={{ width: '8px', height: '8px', borderRadius: '50%', background: '#10B981', boxShadow: '0 0 10px #10B981' }} />
+              <span style={{ fontSize: '0.9rem', opacity: 0.6, textTransform: 'uppercase', letterSpacing: '1px' }}>Available for Q3 Projects</span>
+            </div>
+          </motion.div>
+        </div>
       </div>
 
       <main>{children}</main>
@@ -227,7 +283,7 @@ const Layout = ({ children, isMobile, mouseX, mouseY }) => {
                   <circle cx="20" cy="8" r="3" fill="white" className="spotlight-lens-glow" />
                   <path d="M10 14L8 24M30 14L32 24" stroke="#1A1A1A" strokeWidth="2" strokeLinecap="round"/>
                 </svg>
-                <div className="footer-spotlight-lens-flare" style={{ position: 'absolute', left: '50%', transform: 'translateX(-50%)' }} />
+                <div className="footer-spotlight-lens-flare" style={{ position: 'absolute', left: '50%', top: '8px', transform: 'translate(-50%, -50%)' }} />
               </motion.div>
             )}
 
@@ -247,24 +303,29 @@ const Layout = ({ children, isMobile, mouseX, mouseY }) => {
                   scaleY: { duration: 0.7, ease: [0.16, 1, 0.3, 1] }
                 }}
               >
-                {/* Lens-Corrected Atmospheric Rays (Mist Cluster) */}
-                {[...Array(5)].map((_, i) => (
+                {/* Atmospheric Back-glow */}
+                <motion.div className="footer-light-cone" />
+                
+                {/* 12-Ray Cinematic Cluster from Single Source */}
+                {[...Array(12)].map((_, i) => (
                   <motion.div
                     key={i}
                     className="footer-ray-streak"
-                    initial={{ x: "-50%", rotate: (i - 2) * 7 }}
-                    animate={{
-                      opacity: hoveredIndex === null ? [0.2, 0.4, 0.2] : 0.6,
-                      scaleY: hoveredIndex === null ? [1, 1.1, 1] : 1.15
+                    initial={{ rotate: (i - 5.5) * 3.5, opacity: 0 }}
+                    animate={{ 
+                      opacity: hoveredIndex === null ? [0.1, 0.25, 0.1] : 0.4,
+                      scaleY: hoveredIndex === null ? [1, 1.05, 1] : 1.15
                     }}
                     transition={{
-                      duration: 4 + i,
+                      duration: 3 + i * 0.3,
                       repeat: Infinity,
-                      ease: "easeInOut",
-                      delay: i * 0.3
+                      ease: "easeInOut"
                     }}
                     style={{
+                      position: 'absolute',
+                      top: 0,
                       left: '50%',
+                      x: '-50%',
                       transformOrigin: 'top center'
                     }}
                   />
@@ -275,7 +336,7 @@ const Layout = ({ children, isMobile, mouseX, mouseY }) => {
             {[
               "Ghaziabad, India",
               ...(!isMobile ? ["Available Worldwide"] : []),
-              `© ${new Date().getFullYear()} Piyush Rawat`
+              `@ ${new Date().getFullYear()} Piyush Rawat`
             ].map((item, i) => (
               <motion.div 
                 key={i}

@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react';
-import { motion, useScroll, useTransform, useMotionValueEvent, AnimatePresence } from 'framer-motion';
+import { motion, useScroll, useTransform } from 'framer-motion';
 import Beams from '../components/Beams';
 
 const fadeInUp = {
@@ -64,29 +64,30 @@ const Home = ({ isMobile }) => {
   const workOpacity = useTransform(workProgress, [0.9, 1], [1, 0]);
   const albumTextX  = useTransform(workProgress, [0, 1], ['-5%', '5%']);
 
-  // ---- EXPERTISE SECTION: event-driven card swap ----
   const expertiseSectionRef = useRef(null);
-  const [activeCard, setActiveCard] = React.useState(0);
-
-  const { scrollYProgress: expProgress } = useScroll({
-    target: expertiseSectionRef,
-    offset: ['start start', 'end end']
-  });
 
   const expertiseItems = [
-    { title: 'SHORT-FORM',    desc: 'Viral-ready Reels and Shorts optimised for maximum retention.' },
-    { title: 'YOUTUBE',       desc: 'Advanced storytelling and dynamic pacing for scaling channels.' },
-    { title: 'COLOR GRADING', desc: 'High-end cinematic colour palettes crafted in DaVinci Resolve.' },
-    { title: 'MOTION GRAPHICS', desc: 'Kinetic typography and custom After Effects VFX sequences.' },
+    { 
+      title: 'SHORT-FORM',    
+      desc: 'Viral-ready Reels and Shorts optimized for maximum retention.',
+      points: ['First 3-second hook strategy', 'Sync-heavy transitions', 'High-retention captions', 'Trending audio integration']
+    },
+    { 
+      title: 'YOUTUBE',       
+      desc: 'Advanced storytelling and dynamic pacing for scaling channels.',
+      points: ['Narrative arc structuring', 'Engaging B-Roll selection', 'Pattern interrupt techniques', 'Sound design & Foley']
+    },
+    { 
+      title: 'COLOR GRADING', 
+      desc: 'High-end cinematic colour palettes crafted in DaVinci Resolve.',
+      points: ['Custom LUT development', 'Skin tone correction', 'Shot matching & consistency', 'Atmospheric mood setting']
+    },
+    { 
+      title: 'MOTION GRAPHICS', 
+      desc: 'Kinetic typography and custom After Effects VFX sequences.',
+      points: ['2D/3D Kinetic Typography', 'Logo & UI animations', 'Seamless VFX compositing', 'Brand-aligned visual assets']
+    },
   ];
-
-  useMotionValueEvent(expProgress, 'change', (v) => {
-    const idx = Math.min(
-      Math.floor(v * expertiseItems.length),
-      expertiseItems.length - 1
-    );
-    setActiveCard(idx);
-  });
 
   const projects = [
     { title: "Hershey's Campaign",  tags: ['Commercial', 'Brand Film'],   img: '/assets/project1.png' },
@@ -190,48 +191,74 @@ const Home = ({ isMobile }) => {
       </section>
 
       {/* ── Expertise ── */}
-      <section ref={expertiseSectionRef} className="expertise-stack-container" id="expertise" style={{ height: isMobile ? 'auto' : '500vh' }}>
-        {isMobile ? (
-          <div style={{ padding: '80px 20px' }}>
-            <h2 className="section-title" style={{ marginBottom: '50px' }}>
+      <section ref={expertiseSectionRef} className="expertise-section section-padding" id="expertise">
+        <div className="container">
+          <div style={{ marginBottom: '80px', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', flexWrap: 'wrap', gap: '30px' }}>
+            <h2 className="section-title" style={{ fontSize: 'clamp(3rem, 8vw, 6rem)', lineHeight: 1 }}>
               <MaskText>Core</MaskText><br />
               <MaskText className="text-accent">Expertise</MaskText>
             </h2>
+            <p style={{ maxWidth: '500px', opacity: 0.6, fontSize: '1.1rem' }}>
+              Specialized in high-retention post-production workflows that transform viewer attention into brand authority.
+            </p>
+          </div>
+
+          <div className="expertise-grid">
             {expertiseItems.map((item, i) => (
-              <div key={i} style={{ background: 'rgba(20,20,20,0.9)', padding: '30px', borderRadius: '16px', marginBottom: '20px', border: '1px solid rgba(255,255,255,0.08)' }}>
-                <h4 style={{ color: 'var(--accent-purple)', fontSize: '1.5rem', marginBottom: '10px' }}>{item.title}</h4>
-                <p style={{ opacity: 0.75, lineHeight: 1.6 }}>{item.desc}</p>
-              </div>
+              <motion.div
+                key={i}
+                className="senior-glass expertise-card"
+                initial="hidden"
+                whileInView="visible"
+                viewport={{ once: true, margin: "-100px" }}
+                variants={fadeInUp}
+                whileHover={{ y: -10 }}
+                style={{
+                  padding: '50px',
+                  borderRadius: '32px',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  gap: '24px',
+                  height: '100%'
+                }}
+              >
+                <div style={{ 
+                  width: '50px', 
+                  height: '2px', 
+                  background: 'var(--accent-purple)',
+                  boxShadow: '0 0 15px var(--accent-purple-glow)'
+                }} />
+                
+                <div>
+                  <h4 style={{ 
+                    color: '#fff', 
+                    fontSize: '1.8rem', 
+                    marginBottom: '10px', 
+                    fontFamily: 'Outfit', 
+                    fontWeight: 800,
+                    letterSpacing: '1px'
+                  }}>
+                    {item.title}
+                  </h4>
+                  <p style={{ opacity: 0.7, fontSize: '1rem', lineHeight: 1.6, marginBottom: '20px' }}>
+                    {item.desc}
+                  </p>
+                </div>
+
+                <div style={{ marginTop: 'auto' }}>
+                  <ul style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
+                    {item.points.map((point, idx) => (
+                      <li key={idx} style={{ display: 'flex', alignItems: 'center', gap: '10px', fontSize: '0.9rem', opacity: 0.5 }}>
+                        <span style={{ width: '4px', height: '4px', borderRadius: '50%', background: 'var(--accent-purple)' }} />
+                        {point}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </motion.div>
             ))}
           </div>
-        ) : (
-          <div className="expertise-stack-sticky">
-            <div className="expertise-header-container">
-              <h2 className="section-title" style={{ fontSize: '4.5vw', textAlign: 'left', margin: 0 }}>
-                <MaskText>Core</MaskText><br />
-                <MaskText className="text-accent">Expertise</MaskText>
-              </h2>
-              <div style={{ marginTop: '40px', opacity: 0.4, fontSize: '0.85rem', letterSpacing: '3px', textTransform: 'uppercase' }}>
-                {String(activeCard + 1).padStart(2, '0')} / {String(expertiseItems.length).padStart(2, '0')}
-              </div>
-            </div>
-            <div className="expertise-cards-stack" style={{ display: 'flex', alignItems: 'center' }}>
-              <AnimatePresence mode="wait">
-                <motion.div
-                  key={activeCard}
-                  className="expertise-card-frame"
-                  initial={{ opacity: 0, y: 50, scale: 0.94 }}
-                  animate={{ opacity: 1, y: 0, scale: 1 }}
-                  exit={{ opacity: 0, y: -50, scale: 0.94 }}
-                  transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
-                >
-                  <h4 style={{ color: 'var(--accent-purple)', fontSize: 'clamp(1.8rem, 3.5vw, 2.8rem)', marginBottom: '24px', fontFamily: 'Outfit', fontWeight: 800 }}>{expertiseItems[activeCard].title}</h4>
-                  <p style={{ fontSize: 'clamp(1rem, 1.8vw, 1.3rem)', opacity: 0.75, lineHeight: 1.7 }}>{expertiseItems[activeCard].desc}</p>
-                </motion.div>
-              </AnimatePresence>
-            </div>
-          </div>
-        )}
+        </div>
       </section>
     </>
   );

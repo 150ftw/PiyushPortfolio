@@ -26,9 +26,9 @@ const FluctuatingText = ({ text, delayOffset = 0 }) => {
         className="shine-sweep-layer"
         animate={{ left: ['-100%', '200%'] }}
         transition={{ 
-          duration: 3, 
+          duration: 1.5, 
           repeat: Infinity, 
-          repeatDelay: 6 + Math.random() * 4,
+          repeatDelay: 1.5,
           ease: "easeInOut"
         }}
       />

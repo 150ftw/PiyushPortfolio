@@ -36,7 +36,7 @@ const About = () => {
                             initial={{ opacity: 0, scale: 0.9, x: 50 }}
                             animate={{ opacity: 1, scale: 1, x: 0 }}
                             transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1], delay: 0.2 }}
-                            style={{ position: 'relative' }}
+                            style={{ position: 'relative', width: '100%', maxWidth: '450px', margin: '0 auto' }}
                         >
                             {/* Glow behind image */}
                             <div style={{
@@ -50,11 +50,11 @@ const About = () => {
                                 zIndex: -1
                             }} />
 
-                            <div className="senior-glass" style={{ borderRadius: '40px', overflow: 'hidden', border: '1px solid rgba(255, 255, 255, 0.1)' }}>
+                            <div className="senior-glass" style={{ borderRadius: '40px', overflow: 'hidden', border: '1px solid rgba(255, 255, 255, 0.1)', aspectRatio: '4/5', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                                 <img
                                     src="/assets/piyush.png"
                                     alt="Piyush Rawat"
-                                    style={{ width: '100%', height: 'auto', display: 'block', filter: 'contrast(1.1) brightness(1.05)' }}
+                                    style={{ width: '100%', height: '100%', objectFit: 'contain', padding: '25px', display: 'block', filter: 'contrast(1.1) brightness(1.05)' }}
                                 />
                             </div>
                         </motion.div>

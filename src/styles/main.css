@@ -303,7 +303,7 @@ body {
 }
 
 .expertise-stack-container {
-  height: 1000vh; /* Final extended track for absolute pinning persistence */
+  height: 500vh; /* Each card gets ~100vh of scroll distance */
   position: relative;
 }
 

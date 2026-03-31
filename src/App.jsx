@@ -51,20 +51,41 @@ const MaskText = ({ children, className = "" }) => (
 // Expertise Card Sub-Component to avoid Hook Violations in loops
 const ExpertiseCard = ({ item, index, progress, total }) => {
     const step = 1 / total;
-    const start = index * step;
-    const end = (index + 1) * step;
-    
-    // Overlapping ranges for perfectly continuous cross-fade (no black screens)
-    // Larger Y translation ensures Card A's description clears before Card B's title arrives
-    const inStart = Math.max(0, index * step - 0.05);
-    const inEnd = index * step + 0.03;
-    const outStart = (index + 1) * step - 0.03;
-    const outEnd = Math.min(1, (index + 1) * step + 0.05);
+    // Each card occupies a strict, non-overlapping slice of [0,1]
+    // To avoid any two cards ever being visible at the same time,
+    // fade-in/fade-out are confined entirely within each card's own slice.
+    const sliceStart = index * step;       // e.g. index=1 → 0.25
+    const sliceEnd   = (index + 1) * step; // e.g. index=1 → 0.50
+    const fadeLen    = step * 0.20;        // 20% of slice used for each fade
 
-    // Provide strict, unique interpolation points for Framer Motion to prevent crashes
-    const opacity = useTransform(progress, [inStart, inEnd, outStart, outEnd], [0, 1, 1, 0]);
-    const scale = useTransform(progress, [inStart, inEnd, outStart, outEnd], [0.85, 1, 1, 0.85]);
-    const y = useTransform(progress, [inStart, inEnd, outStart, outEnd], [150, 0, 0, -150]);
+    const inStart  = sliceStart;               // begin fade-in at slice start
+    const inEnd    = sliceStart + fadeLen;     // fully visible after 20%
+    const outStart = sliceEnd   - fadeLen;     // begin fade-out 20% before slice end
+    const outEnd   = sliceEnd;                 // fully invisible at slice end
+
+    // First card: starts fully visible (no fade-in from black at t=0)
+    // Use a tiny epsilon for inEnd so Framer Motion never gets [0,0,...] duplicate input
+    const adjustedInStart  = index === 0 ? 0     : inStart;
+    const adjustedInEnd    = index === 0 ? 0.001 : inEnd;
+    // Last card: stays visible until the very end (no fade-out)
+    const adjustedOutStart = index === total - 1 ? 0.999 : outStart;
+    const adjustedOutEnd   = index === total - 1 ? 1.0   : outEnd;
+
+    const opacity = useTransform(
+        progress,
+        [adjustedInStart, adjustedInEnd, adjustedOutStart, adjustedOutEnd],
+        [0, 1, 1, 0]
+    );
+    const scale = useTransform(
+        progress,
+        [adjustedInStart, adjustedInEnd, adjustedOutStart, adjustedOutEnd],
+        [0.88, 1, 1, 0.88]
+    );
+    const y = useTransform(
+        progress,
+        [adjustedInStart, adjustedInEnd, adjustedOutStart, adjustedOutEnd],
+        [80, 0, 0, -80]
+    );
 
     return (
         <motion.div 
@@ -115,11 +136,15 @@ const App = () => {
     offset: ["start start", "end end"]
   });
   
-  // Use exact vw translation to perfectly center the final project and prevent it from looking "half cut"
-  const xTranslate = useTransform(workProgress, [0, 1], ["0vw", "-140vw"]);
-  // This opacity smoothly fades the entire project gallery out at the very end to satisfy "vanishes from that section"
-  const workOpacity = useTransform(workProgress, [0.95, 1], [1, 0]);
-  // Fixed "ALBUMS" parallax math: ensure it stays centered
+  // Horizontal content total width:
+  //   left-pad(10vw) + title(50vw) + gap(15vw) + 4 cards×35vw + 3 gaps×15vw + right-pad(10vw)
+  //   = 10 + 50 + 15 + 140 + 45 + 10 = 270vw total
+  // To show last card centred in 100vw viewport: translate = -(270 - 50 - 100) = -120vw
+  // Adding extra buffer for the gap before last card: -165vw
+  const xTranslate = useTransform(workProgress, [0, 1], ["0vw", "-165vw"]);
+  // Fade the entire section out in the final 5% of its scroll so it cleanly vanishes
+  const workOpacity = useTransform(workProgress, [0.92, 1], [1, 0]);
+  // Parallax watermark drifts slightly
   const albumTextX = useTransform(workProgress, [0, 1], ["-10%", "10%"]);
 
   // Expertise Stacking Logic

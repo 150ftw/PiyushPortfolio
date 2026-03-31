@@ -910,18 +910,19 @@ footer::before {
 .footer-ray-streak {
   position: absolute;
   top: 0;
-  width: 120px;
-  height: 100%;
-  background: radial-gradient(
-    ellipse at top,
-    rgba(133, 77, 255, 0.45) 0%,
-    rgba(133, 77, 255, 0.1) 40%,
-    transparent 85%
+  width: 140px;
+  height: 280px;
+  background: linear-gradient(
+    to bottom,
+    rgba(147, 88, 255, 0.8) 0%,
+    rgba(147, 88, 255, 0.3) 40%,
+    transparent 100%
   );
-  filter: blur(25px);
+  clip-path: polygon(50% 0%, 0% 100%, 100% 100%);
+  filter: blur(8px);
   mix-blend-mode: color-dodge;
-  transform-origin: center top;
   will-change: transform, opacity;
+  pointer-events: none;
 }
 
 @media (max-width: 768px) {

@@ -229,16 +229,24 @@ nav.scrolled {
 .mask-container {
   overflow: hidden;
   display: block;
+  line-height: 1.2;
 }
 
 .mask-text {
   display: block;
+  transform: translateY(100%);
 }
 
 /* Horizontal Scroll Container */
 .horizontal-scroll-section {
   position: relative;
-  height: 400vh; /* Determines the vertical scroll space for horizontal movement */
+  height: 400vh;
+}
+
+@media (max-width: 768px) {
+  .horizontal-scroll-section {
+    height: auto !important;
+  }
 }
 
 .sticky-wrapper {
@@ -251,6 +259,16 @@ nav.scrolled {
   align-items: center;
 }
 
+@media (max-width: 768px) {
+  .sticky-wrapper {
+    position: relative;
+    height: auto;
+    overflow: visible;
+    display: block;
+    padding: 60px 0;
+  }
+}
+
 .horizontal-content {
   display: flex;
   gap: 15vw;
@@ -259,9 +277,24 @@ nav.scrolled {
   will-change: transform;
 }
 
+@media (max-width: 768px) {
+  .horizontal-content {
+    flex-direction: column;
+    gap: 60px;
+    padding: 0 20px;
+    transform: none !important;
+  }
+}
+
 .expertise-stack-container {
-  height: 600vh; /* Long scroll distance for stacking frames */
+  height: 600vh;
   position: relative;
+}
+
+@media (max-width: 768px) {
+  .expertise-stack-container {
+    height: auto;
+  }
 }
 
 .expertise-stack-sticky {
@@ -271,6 +304,16 @@ nav.scrolled {
   display: flex;
   align-items: center;
   overflow: hidden;
+}
+
+@media (max-width: 768px) {
+  .expertise-stack-sticky {
+    position: relative;
+    height: auto;
+    display: block;
+    overflow: visible;
+    padding: 60px 20px;
+  }
 }
 
 .expertise-card-frame {
@@ -286,6 +329,20 @@ nav.scrolled {
   border-radius: 30px;
   border: 1px solid rgba(255, 255, 255, 0.1);
   box-shadow: 0 40px 100px rgba(0, 0, 0, 0.5);
+}
+
+@media (max-width: 768px) {
+  .expertise-card-frame {
+    position: relative;
+    top: 0;
+    left: 0;
+    transform: none;
+    width: 100% !important;
+    opacity: 1 !important;
+    scale: 1 !important;
+    margin-bottom: 30px;
+    padding: 40px 20px;
+  }
 }
 
 .cursor-glow {
@@ -388,7 +445,7 @@ nav.scrolled {
   font-size: 25vw;
   font-family: 'Outfit';
   font-weight: 900;
-  color: rgba(255, 255, 255, 0.03);
+  color: rgba(255, 255, 255, 0.1); /* Increased opacity for visibility */
   pointer-events: none;
   white-space: nowrap;
   z-index: 0;

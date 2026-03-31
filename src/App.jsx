@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { motion, useScroll, useTransform, useSpring } from 'framer-motion';
+import { motion, useScroll, useTransform, useSpring, useInView } from 'framer-motion';
 import { ReactLenis } from 'lenis/react';
 import Beams from './components/Beams';
 
@@ -48,25 +48,60 @@ const MaskText = ({ children, className = "" }) => (
     </span>
 );
 
+// Expertise Card Sub-Component to avoid Hook Violations in loops
+const ExpertiseCard = ({ item, index, progress, total }) => {
+    const step = 1 / total;
+    const start = index * step;
+    const end = (index + 1) * step;
+    
+    // Smooth transitions between cards
+    const opacity = useTransform(progress, [start, start + 0.1, end - 0.1, end], [0, 1, 1, 0]);
+    const scale = useTransform(progress, [start, start + 0.1, end - 0.1, end], [0.8, 1, 1, 0.8]);
+    const y = useTransform(progress, [start, start + 0.1, end - 0.1, end], [50, 0, 0, -50]);
+
+    return (
+        <motion.div 
+            className="expertise-card-frame"
+            style={{ opacity, scale, y }}
+        >
+            <h4 style={{ color: 'var(--accent-purple)', fontSize: 'clamp(1.5rem, 4vw, 2.5rem)', marginBottom: '20px' }}>{item.title}</h4>
+            <p style={{ fontSize: 'clamp(1rem, 2vw, 1.4rem)', opacity: 0.8, lineHeight: '1.6' }}>{item.desc}</p>
+        </motion.div>
+    );
+};
+
 const App = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
   const marqueeRef = useRef(null);
   
   // Mouse Glow Logic
-  const mouseX = useSpring(0, { stiffness: 50, damping: 20 });
-  const mouseY = useSpring(0, { stiffness: 50, damping: 20 });
+  const mouseX = useSpring(0, { stiffness: 60, damping: 25 });
+  const mouseY = useSpring(0, { stiffness: 60, damping: 25 });
 
   useEffect(() => {
+    // RESOLVE INITIAL SCROLL OFFSET BUG
+    window.scrollTo(0, 0);
+    if (window.history.scrollRestoration) window.history.scrollRestoration = 'manual';
+
+    const checkMobile = () => setIsMobile(window.innerWidth <= 768);
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    
     const handleMouseMove = (e) => {
       mouseX.set(e.clientX - 150);
       mouseY.set(e.clientY - 150);
     };
     window.addEventListener('mousemove', handleMouseMove);
-    return () => window.removeEventListener('mousemove', handleMouseMove);
-  }, []);
+    
+    return () => {
+      window.removeEventListener('resize', checkMobile);
+      window.removeEventListener('mousemove', handleMouseMove);
+    };
+  }, [mouseX, mouseY]);
 
-  // Horizontal Scroll Logic (Selected Work)
+  // Horizontal Scroll Logic
   const workRef = useRef(null);
   const { scrollYProgress: workProgress } = useScroll({
     target: workRef,
@@ -74,7 +109,8 @@ const App = () => {
   });
   
   const xTranslate = useTransform(workProgress, [0, 1], ["0%", "-65%"]);
-  const albumTextX = useTransform(workProgress, [0, 1], ["-10%", "130%"]);
+  // Fixed "ALBUMS" parallax math: ensure it stays centered
+  const albumTextX = useTransform(workProgress, [0, 1], ["-20%", "20%"]);
 
   // Expertise Stacking Logic
   const expertiseRef = useRef(null);
@@ -99,8 +135,9 @@ const App = () => {
   }, []);
 
   const toggleMenu = () => {
-    setIsMenuOpen(!isMenuOpen);
-    document.body.style.overflow = isMenuOpen ? 'auto' : 'hidden';
+    const nextState = !isMenuOpen;
+    setIsMenuOpen(nextState);
+    document.body.style.overflow = nextState ? 'hidden' : 'auto';
   };
 
   const closeMenu = () => {
@@ -109,13 +146,15 @@ const App = () => {
   };
 
   return (
-    <ReactLenis root>
+    <ReactLenis root options={{ lerp: 0.1, duration: 1.5, smoothWheel: true }}>
       <div id="app-container" style={{ position: 'relative', overflowX: 'hidden', background: '#000' }}>
         {/* Cinematic Mouse Glow */}
-        <motion.div 
-            className="cursor-glow"
-            style={{ x: mouseX, y: mouseY }}
-        />
+        {!isMobile && (
+            <motion.div 
+                className="cursor-glow"
+                style={{ x: mouseX, y: mouseY }}
+            />
+        )}
 
         {/* Navigation */}
         <nav className={isScrolled ? 'scrolled' : ''} style={{ pointerEvents: 'all' }}>
@@ -163,7 +202,7 @@ const App = () => {
         </div>
 
         {/* Hero Section */}
-        <section className="hero">
+        <section className="hero" id="home">
           <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', zIndex: 0, pointerEvents: 'none' }}>
             <Beams
               beamWidth={3}
@@ -180,7 +219,7 @@ const App = () => {
             <h1 className="hero-title" style={{ display: 'flex', flexDirection: 'column' }}>
                 <MaskText>LET'S CREATE</MaskText>
                 <MaskText>VIDEOS PEOPLE</MaskText>
-                <div style={{ display: 'flex', gap: '20px' }}>
+                <div style={{ display: 'flex', flexWrap: 'wrap', gap: '20px' }}>
                     <MaskText>ACTUALLY </MaskText>
                     <MaskText className="text-accent">WATCH</MaskText>
                 </div>
@@ -222,7 +261,7 @@ const App = () => {
 
         {/* About Section */}
         <section className="section-padding" id="about">
-          <div className="container" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '60px', alignItems: 'start' }}>
+          <div className="container" style={{ display: 'grid', gridTemplateColumns: isMobile ? '1fr' : '1fr 1fr', gap: isMobile ? '40px' : '60px', alignItems: 'start' }}>
             <h2 className="section-title">
                <MaskText>Performance</MaskText><br/>
                <MaskText>Meets</MaskText><br/>
@@ -235,7 +274,7 @@ const App = () => {
               viewport={{ once: true, margin: "-100px" }}
               variants={staggerContainer}
             >
-              <motion.p style={{ marginBottom: '30px' }} variants={fadeInUp}>
+              <motion.p style={{ marginBottom: '30px', fontSize: 'clamp(1rem, 2vw, 1.1rem)' }} variants={fadeInUp}>
                 I am Piyush Rawat, a video editor focused on creating clean, engaging, and high-retention content. I work with creators and brands to transform raw footage into polished videos that capture attention and keep it.
               </motion.p>
               <motion.div style={{ marginBottom: '30px', fontSize: '0.9rem', letterSpacing: '1px', opacity: 0.7 }} variants={fadeInUp}>
@@ -258,16 +297,18 @@ const App = () => {
         {/* Work Section - Sticky Horizontal Scroll Experience */}
         <section ref={workRef} className="horizontal-scroll-section" id="work">
             <div className="sticky-wrapper">
-                <motion.div 
-                    className="parallax-bg-text"
-                    style={{ x: albumTextX, top: '50%', transform: 'translateY(-50%)', opacity: 0.05 }}
-                >
-                    ALBUMS
-                </motion.div>
+                {!isMobile && (
+                    <motion.div 
+                        className="parallax-bg-text"
+                        style={{ x: albumTextX, left: '50%', top: '50%', transform: 'translate(-50%, -50%)' }}
+                    >
+                        ALBUMS
+                    </motion.div>
+                )}
                 
-                <motion.div className="horizontal-content" style={{ x: xTranslate }}>
-                    <div style={{ minWidth: '40vw' }}>
-                        <h2 className="section-title" style={{ fontSize: '8vw' }}>
+                <motion.div className="horizontal-content" style={{ x: isMobile ? 0 : xTranslate }}>
+                    <div style={{ minWidth: isMobile ? '100%' : '50vw' }}>
+                        <h2 className="section-title" style={{ fontSize: isMobile ? '3.5rem' : '8vw' }}>
                             <MaskText>Selected</MaskText><br/>
                             <MaskText className="text-accent">Work</MaskText>
                         </h2>
@@ -284,14 +325,14 @@ const App = () => {
                             href="#"
                             className="project-card"
                             style={{ 
-                                minWidth: '35vw', 
-                                height: '60vh', 
-                                marginTop: i % 2 === 0 ? '-5vh' : '5vh',
-                                scale: i === 0 ? 1 : 0.95
+                                minWidth: isMobile ? '100%' : '35vw', 
+                                height: isMobile ? 'auto' : '60vh', 
+                                marginTop: (!isMobile && i % 2 === 0) ? '-5vh' : '5vh',
+                                scale: (isMobile || i === 0) ? 1 : 0.95
                             }}
                             whileHover={{ scale: 1.02 }}
                         >
-                            <div className="project-img-wrapper" style={{ height: '100%', borderRadius: '20px' }}>
+                            <div className="project-img-wrapper" style={{ height: isMobile ? '300px' : '100%', borderRadius: '20px' }}>
                                 <motion.img 
                                     src={proj.img} 
                                     alt={proj.title} 
@@ -315,47 +356,47 @@ const App = () => {
         {/* Expertise Section - Sticky Stack Experience */}
         <section ref={expertiseRef} className="expertise-stack-container" id="expertise">
             <div className="expertise-stack-sticky">
-                <div style={{ position: 'absolute', top: '10%', left: '5%', zIndex: 10 }}>
-                    <h2 className="section-title" style={{ fontSize: '5vw' }}>
+                <div style={isMobile ? { padding: '40px 0' } : { position: 'absolute', top: '10%', left: '5%', zIndex: 10 }}>
+                    <h2 className="section-title" style={{ fontSize: isMobile ? '3.5rem' : '5vw' }}>
                         <MaskText>Core</MaskText><br/>
                         <MaskText className="text-accent">Expertise</MaskText>
                     </h2>
                 </div>
 
-                {[
-                    { title: "SHORT-FORM", desc: "Viral-ready Reels and Shorts optimized for retention.", bg: "rgba(168, 85, 247, 0.1)" },
-                    { title: "YOUTUBE", desc: "Advanced storytelling and dynamic pacing for scaling channels.", bg: "rgba(255, 0, 0, 0.05)" },
-                    { title: "COLOR GRADING", desc: "High-end cinematic color palettes in DaVinci Resolve.", bg: "rgba(0, 255, 255, 0.05)" },
-                    { title: "MOTION GRAPHICS", desc: "Kinetic typography and custom After Effects VFX.", bg: "rgba(255, 255, 255, 0.05)" }
-                ].map((item, i) => {
-                    const step = 1 / 4;
-                    const start = i * step;
-                    const end = (i + 1) * step;
-                    
-                    // eslint-disable-next-line react-hooks/rules-of-hooks
-                    const opacity = useTransform(expProgress, [start, start + 0.05, end - 0.05, end], [0, 1, 1, 0]);
-                    // eslint-disable-next-line react-hooks/rules-of-hooks
-                    const scale = useTransform(expProgress, [start, start + 0.05, end - 0.05, end], [0.8, 1, 1, 0.8]);
-                    // eslint-disable-next-line react-hooks/rules-of-hooks
-                    const y = useTransform(expProgress, [start, start + 0.05, end - 0.05, end], [50, 0, 0, -50]);
-
-                    return (
-                        <motion.div 
-                            key={i}
-                            className="expertise-card-frame"
-                            style={{ opacity, scale, y }}
-                        >
-                            <h4 style={{ color: 'var(--accent-purple)', fontSize: '2.5rem', marginBottom: '20px' }}>{item.title}</h4>
-                            <p style={{ fontSize: '1.4rem', opacity: 0.8, lineHeight: '1.6' }}>{item.desc}</p>
-                        </motion.div>
-                    );
-                })}
+                {!isMobile ? [
+                    { title: "SHORT-FORM", desc: "Viral-ready Reels and Shorts optimized for retention." },
+                    { title: "YOUTUBE", desc: "Advanced storytelling and dynamic pacing for scaling channels." },
+                    { title: "COLOR GRADING", desc: "High-end cinematic color palettes in DaVinci Resolve." },
+                    { title: "MOTION GRAPHICS", desc: "Kinetic typography and custom After Effects VFX." }
+                ].map((item, i, arr) => (
+                    <ExpertiseCard 
+                        key={i} 
+                        item={item} 
+                        index={i} 
+                        progress={expProgress} 
+                        total={arr.length} 
+                    />
+                )) : (
+                    <div className="expertise-list-mobile" style={{ padding: '0 20px' }}>
+                        {[
+                            { title: "SHORT-FORM", desc: "Viral-ready Reels and Shorts optimized for retention." },
+                            { title: "YOUTUBE", desc: "Advanced storytelling and dynamic pacing for scaling channels." },
+                            { title: "COLOR GRADING", desc: "High-end cinematic color palettes in DaVinci Resolve." },
+                            { title: "MOTION GRAPHICS", desc: "Kinetic typography and custom After Effects VFX." }
+                        ].map((item, i) => (
+                            <div key={i} className="expertise-card-frame" style={{ position: 'relative', transform: 'none', width: '100%', opacity: 1, scale: 1, marginBottom: '30px' }}>
+                                <h4 style={{ color: 'var(--accent-purple)', fontSize: '1.8rem', marginBottom: '15px' }}>{item.title}</h4>
+                                <p style={{ fontSize: '1.1rem', opacity: 0.8, lineHeight: '1.6' }}>{item.desc}</p>
+                            </div>
+                        ))}
+                    </div>
+                )}
             </div>
         </section>
 
         {/* Footer */}
-        <footer id="footer">
-          <div className="container footer-content">
+        <footer id="footer" className="section-padding">
+          <div className="container footer-content" style={{ textAlign: 'center' }}>
             <motion.a 
               href="mailto:hello@piyushrawat.com" 
               className="contact-link"
@@ -366,15 +407,15 @@ const App = () => {
                 initial={{ opacity: 0 }}
                 whileInView={{ opacity: 1 }}
                 transition={{ delay: 0.5 }}
-                style={{ fontSize: '1.5rem', color: 'var(--accent-purple)' }}
+                style={{ fontSize: isMobile ? '1.1rem' : '1.5rem', color: 'var(--accent-purple)', marginTop: '20px' }}
               >
                 START YOUR PROJECT TODAY →
               </motion.span>
             </motion.a>
             
-            <div style={{ marginTop: '100px', display: 'flex', justifyContent: 'space-between', width: '100%', opacity: 0.6 }}>
+            <div style={{ marginTop: '100px', display: 'flex', flexDirection: isMobile ? 'column' : 'row', justifyContent: 'space-between', gap: '20px', width: '100%', opacity: 0.6, fontSize: '0.9rem' }}>
                 <div>GHAZIABAD, INDIA</div>
-                <div>AVAILABLE WORLDWIDE</div>
+                {!isMobile && <div>AVAILABLE WORLDWIDE</div>}
                 <div>&copy; {new Date().getFullYear()} PIYUSH RAWAT</div>
             </div>
           </div>

@@ -210,7 +210,7 @@ const Layout = ({ children, isMobile, mouseX, mouseY }) => {
                 animate={{
                   opacity: 1,
                   x: "-50%",
-                  rotate: hoveredIndex === 0 ? -30 : hoveredIndex === 1 ? 0 : hoveredIndex === 2 ? 30 : 0,
+                  rotate: hoveredIndex === 0 ? -48 : hoveredIndex === 1 ? 0 : hoveredIndex === 2 ? 48 : 0,
                   filter: hoveredIndex === null 
                     ? ["drop-shadow(0 0 12px rgba(133, 77, 255, 0.4))", "drop-shadow(0 0 20px rgba(133, 77, 255, 0.6))", "drop-shadow(0 0 12px rgba(133, 77, 255, 0.4))"] 
                     : "drop-shadow(0 0 18px rgba(133, 77, 255, 0.7))"
@@ -238,7 +238,7 @@ const Layout = ({ children, isMobile, mouseX, mouseY }) => {
                 animate={{
                   opacity: 1,
                   x: "-50%",
-                  rotate: hoveredIndex === 0 ? -28 : hoveredIndex === 1 ? 0 : hoveredIndex === 2 ? 28 : 0
+                  rotate: hoveredIndex === 0 ? -48 : hoveredIndex === 1 ? 0 : hoveredIndex === 2 ? 48 : 0
                 }}
                 transition={{ 
                   rotate: { duration: 0.7, ease: [0.16, 1, 0.3, 1] }

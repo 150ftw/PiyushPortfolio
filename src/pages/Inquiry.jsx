@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 const steps = [
   { id: 1, title: 'Lead Capture' },
@@ -56,14 +56,9 @@ const Inquiry = () => {
         
         {/* Progress Section */}
         <div style={{ marginBottom: '40px' }}>
-          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '15px' }}>
-            <div style={{ display: 'flex', flexDirection: 'column' }}>
-              <span className="text-tracking-wide" style={{ fontSize: '0.8rem', opacity: 0.5 }}>Step {currentStep} of 4</span>
-              <span className="text-tracking-wide" style={{ fontSize: '1.2rem', opacity: 0.8, color: 'var(--accent-purple)', fontFamily: 'Outfit', fontWeight: 700 }}>{steps[currentStep-1].title}</span>
-            </div>
-            <Link to="/contact" style={{ color: 'white', textDecoration: 'none', fontSize: '0.8rem', opacity: 0.5 }}>
-              ← Direct Reach
-            </Link>
+          <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '15px' }}>
+            <span className="text-tracking-wide" style={{ fontSize: '0.8rem', opacity: 0.5 }}>Step {currentStep} of 4</span>
+            <span className="text-tracking-wide" style={{ fontSize: '0.8rem', opacity: 0.8, color: 'var(--accent-purple)' }}>{steps[currentStep-1].title}</span>
           </div>
           <div className="progress-container">
             <div className="progress-bar" style={{ width: `${progress}%` }} />

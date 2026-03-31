@@ -238,7 +238,7 @@ const Layout = ({ children, isMobile, mouseX, mouseY }) => {
                 animate={{
                   opacity: 1,
                   x: "-50%",
-                  rotate: hoveredIndex === 0 ? -48 : hoveredIndex === 1 ? 0 : hoveredIndex === 2 ? 48 : 0
+                  rotate: hoveredIndex === 0 ? 48 : hoveredIndex === 1 ? 0 : hoveredIndex === 2 ? -48 : 0
                 }}
                 transition={{ 
                   rotate: { duration: 0.7, ease: [0.16, 1, 0.3, 1] }

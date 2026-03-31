@@ -1,5 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
+import { Link } from 'react-router-dom';
 import BookingCTA from '../components/BookingCTA';
 
 const fadeInUp = {
@@ -54,26 +55,28 @@ const Contact = () => {
                             <p style={{ opacity: 0.7, lineHeight: '1.8', marginBottom: '40px' }}>
                                 For brand inquiries, creator partnerships, or bulk short-form retainers, please reach out directly via email or the booking link below. I typically respond within 24 hours.
                             </p>
-                            <motion.button
-                                whileHover={{ scale: 1.05, boxShadow: '0 0 30px rgba(133, 77, 255, 0.3)' }}
-                                whileTap={{ scale: 0.95 }}
-                                style={{
-                                    background: 'var(--accent-purple)',
-                                    color: 'white',
-                                    border: 'none',
-                                    padding: '20px 45px',
-                                    borderRadius: '50px',
-                                    fontSize: '1rem',
-                                    fontWeight: 700,
-                                    fontFamily: 'Outfit',
-                                    cursor: 'pointer',
-                                    textTransform: 'uppercase',
-                                    letterSpacing: '1px',
-                                    width: 'fit-content'
-                                }}
-                            >
-                                Start Your Project Today
-                            </motion.button>
+                            <Link to="/inquiry" style={{ textDecoration: 'none' }}>
+                                <motion.button
+                                    whileHover={{ scale: 1.05, boxShadow: '0 0 30px rgba(133, 77, 255, 0.3)' }}
+                                    whileTap={{ scale: 0.95 }}
+                                    style={{
+                                        background: 'var(--accent-purple)',
+                                        color: 'white',
+                                        border: 'none',
+                                        padding: '20px 45px',
+                                        borderRadius: '50px',
+                                        fontSize: '1rem',
+                                        fontWeight: 700,
+                                        fontFamily: 'Outfit',
+                                        cursor: 'pointer',
+                                        textTransform: 'uppercase',
+                                        letterSpacing: '1px',
+                                        width: 'fit-content'
+                                    }}
+                                >
+                                    Start Your Project Today
+                                </motion.button>
+                            </Link>
                         </motion.div>
                     </div>
                 </div>

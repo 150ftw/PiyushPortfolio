@@ -29,7 +29,7 @@ const BookingCTA = () => {
                     </p>
                     
                     <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '20px' }}>
-                        <Link to="/contact" style={{ textDecoration: 'none' }}>
+                        <Link to="/inquiry" style={{ textDecoration: 'none' }}>
                             <motion.button
                                 whileHover={{ scale: 1.05, boxShadow: '0 0 30px rgba(133, 77, 255, 0.4)' }}
                                 whileTap={{ scale: 0.95 }}

@@ -12,6 +12,8 @@ import About from './pages/About';
 import Work from './pages/Work';
 import Expertise from './pages/Expertise';
 import Contact from './pages/Contact';
+import Inquiry from './pages/Inquiry';
+import ThankYou from './pages/ThankYou';
 
 const App = () => {
   const [isMobile, setIsMobile] = useState(false);
@@ -50,6 +52,8 @@ const App = () => {
           <Route path="/work" element={<Work />} />
           <Route path="/expertise" element={<Expertise />} />
           <Route path="/contact" element={<Contact />} />
+          <Route path="/inquiry" element={<Inquiry />} />
+          <Route path="/thank-you" element={<ThankYou />} />
         </Routes>
       </Layout>
     </ReactLenis>

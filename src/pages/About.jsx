@@ -24,7 +24,7 @@ const About = () => {
                     <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '80px', alignItems: 'center' }}>
                         <motion.div initial="hidden" animate="visible" variants={fadeInUp}>
                             <h1 className="section-title" style={{ fontSize: 'clamp(3rem, 10vw, 6rem)', marginBottom: '40px' }}>
-                                The <span className="text-accent">Story</span> <br />
+                                The <span className="text-accent">Vision</span> <br />
                                 Behind the Frames
                             </h1>
                             <p style={{ maxWidth: '800px', fontSize: 'clamp(1.1rem, 2vw, 1.4rem)', lineHeight: '1.7', opacity: 0.8 }}>

@@ -667,9 +667,9 @@ footer::before {
   background: linear-gradient(
     90deg,
     transparent,
-    rgba(255, 255, 255, 0.2) 20%,
-    rgba(255, 255, 255, 0.5) 50%,
-    rgba(255, 255, 255, 0.2) 80%,
+    rgba(255, 255, 255, 0.05) 20%,
+    rgba(255, 255, 255, 0.12) 50%,
+    rgba(255, 255, 255, 0.05) 80%,
     transparent
   );
   transform: skewX(-25deg);
@@ -679,10 +679,10 @@ footer::before {
 }
 
 @keyframes shimmer-surge {
-  0%, 100% { opacity: 1; text-shadow: 0 0 10px rgba(168, 85, 247, 0); filter: brightness(1); }
-  5% { opacity: 1; text-shadow: 0 0 30px rgba(168, 85, 247, 1), 0 0 60px rgba(168, 85, 247, 0.6); filter: brightness(1.8); }
-  10% { opacity: 0.8; text-shadow: 0 0 15px rgba(168, 85, 247, 0.8); filter: brightness(1.2); }
-  15% { opacity: 1; text-shadow: 0 0 25px rgba(168, 85, 247, 1); filter: brightness(1.5); }
+  0%, 100% { opacity: 1; text-shadow: 0 0 5px rgba(168, 85, 247, 0); filter: brightness(1); }
+  5% { opacity: 1; text-shadow: 0 0 10px rgba(168, 85, 247, 0.3); filter: brightness(1.2); }
+  10% { opacity: 0.95; text-shadow: 0 0 5px rgba(168, 85, 247, 0.2); filter: brightness(1.1); }
+  15% { opacity: 1; text-shadow: 0 0 8px rgba(168, 85, 247, 0.3); filter: brightness(1.15); }
 }
 
 @keyframes gloss-sweep {

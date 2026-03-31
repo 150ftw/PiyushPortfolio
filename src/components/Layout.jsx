@@ -37,21 +37,21 @@ const FluctuatingText = ({ text, delayOffset = 0 }) => {
         <motion.span
           key={i}
           animate={{ 
-            opacity: [1, 0.9, 1],
+            opacity: [1, 0.98, 1],
             textShadow: [
-              '0 0 10px rgba(168, 85, 247, 0.1)',
-              '0 0 25px rgba(168, 85, 247, 0.8)',
-              '0 0 40px rgba(168, 85, 247, 0.4)',
-              '0 0 10px rgba(168, 85, 247, 0.1)',
+              '0 0 2px rgba(168, 85, 247, 0)',
+              '0 0 5px rgba(168, 85, 247, 0.3)',
+              '0 0 8px rgba(168, 85, 247, 0.2)',
+              '0 0 2px rgba(168, 85, 247, 0)',
             ],
-            scale: [1, 1.08, 1.02, 1],
-            filter: ['brightness(1)', 'brightness(2)', 'brightness(1.5)', 'brightness(1)'],
+            scale: [1, 1.01, 1],
+            filter: ['brightness(1)', 'brightness(1.2)', 'brightness(1.1)', 'brightness(1)'],
           }}
           transition={{
-            duration: 3,
+            duration: 0.8,
             repeat: Infinity,
             repeatType: "mirror",
-            repeatDelay: 5 + Math.random() * 5,
+            repeatDelay: 3 + Math.random() * 5,
             delay: i * 0.08 + delayOffset,
             ease: "easeInOut"
           }}

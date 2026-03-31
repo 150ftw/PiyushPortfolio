@@ -18,25 +18,25 @@ const staggerContainer = {
 
 const FluctuatingText = ({ text, delayOffset = 0 }) => {
   const chars = Array.from(text);
-  
+
   return (
     <div style={{ position: 'relative', display: 'flex', flexWrap: 'wrap', justifyContent: 'center', color: '#fff', overflow: 'hidden', padding: '10px 0' }}>
       {/* Shine Sweep Layer */}
-      <motion.div 
+      <motion.div
         className="shine-sweep-layer"
         animate={{ left: ['-100%', '200%'] }}
-        transition={{ 
-          duration: 1.5, 
-          repeat: Infinity, 
+        transition={{
+          duration: 1.5,
+          repeat: Infinity,
           repeatDelay: 1.5,
           ease: "easeInOut"
         }}
       />
-      
+
       {chars.map((char, i) => (
         <motion.span
           key={i}
-          animate={{ 
+          animate={{
             opacity: [1, 0.98, 1],
             textShadow: [
               '0 0 2px rgba(168, 85, 247, 0)',
@@ -55,8 +55,8 @@ const FluctuatingText = ({ text, delayOffset = 0 }) => {
             delay: i * 0.08 + delayOffset,
             ease: "easeInOut"
           }}
-          style={{ 
-            display: 'inline-block', 
+          style={{
+            display: 'inline-block',
             whiteSpace: char === ' ' ? 'pre' : 'normal',
             lineHeight: '1',
             letterSpacing: '0.02em',
@@ -87,7 +87,7 @@ const Layout = ({ children, isMobile, mouseX, mouseY }) => {
   useEffect(() => {
     setIsMenuOpen(false);
     document.body.style.overflow = 'auto';
-    
+
     if (lenis) {
       lenis.scrollTo(0, { immediate: true });
     }
@@ -197,7 +197,7 @@ const Layout = ({ children, isMobile, mouseX, mouseY }) => {
               viewport={{ once: true }}
               transition={{ delay: 0.6, duration: 0.8 }}
             >
-              Inquire Now &nbsp;→
+              &nbsp;
             </motion.span>
           </Link>
 
@@ -211,11 +211,11 @@ const Layout = ({ children, isMobile, mouseX, mouseY }) => {
                   opacity: 1,
                   x: "-50%",
                   rotate: hoveredIndex === 0 ? 68 : hoveredIndex === 1 ? 0 : hoveredIndex === 2 ? -68 : 0,
-                  filter: hoveredIndex === null 
-                    ? ["drop-shadow(0 0 12px rgba(133, 77, 255, 0.4))", "drop-shadow(0 0 20px rgba(133, 77, 255, 0.6))", "drop-shadow(0 0 12px rgba(133, 77, 255, 0.4))"] 
+                  filter: hoveredIndex === null
+                    ? ["drop-shadow(0 0 12px rgba(133, 77, 255, 0.4))", "drop-shadow(0 0 20px rgba(133, 77, 255, 0.6))", "drop-shadow(0 0 12px rgba(133, 77, 255, 0.4))"]
                     : "drop-shadow(0 0 18px rgba(133, 77, 255, 0.7))"
                 }}
-                transition={{ 
+                transition={{
                   rotate: { duration: 0.7, ease: [0.16, 1, 0.3, 1] },
                   filter: hoveredIndex === null ? { duration: 3, repeat: Infinity, ease: "easeInOut" } : { duration: 0.3 }
                 }}
@@ -241,7 +241,7 @@ const Layout = ({ children, isMobile, mouseX, mouseY }) => {
                   rotate: hoveredIndex === 0 ? 68 : hoveredIndex === 1 ? 0 : hoveredIndex === 2 ? -68 : 0,
                   scaleY: hoveredIndex === 0 || hoveredIndex === 2 ? 1.35 : 1
                 }}
-                transition={{ 
+                transition={{
                   rotate: { duration: 0.7, ease: [0.16, 1, 0.3, 1] },
                   scaleY: { duration: 0.7, ease: [0.16, 1, 0.3, 1] }
                 }}

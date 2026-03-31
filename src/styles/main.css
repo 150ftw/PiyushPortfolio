@@ -869,7 +869,7 @@ footer::before {
 
 .footer-spotlight-fixture {
   position: absolute;
-  top: -120px;
+  top: -200px;
   left: 50%;
   transform: translateX(-50%);
   transform-origin: center top;
@@ -897,7 +897,7 @@ footer::before {
 
 .footer-spotlight-beam {
   position: absolute;
-  top: -104px;
+  top: -184px;
   left: 50%;
   width: 200px;
   height: 240px;
@@ -911,7 +911,7 @@ footer::before {
   position: absolute;
   top: 0;
   width: 100px;
-  height: 320px;
+  height: 500px;
   background: linear-gradient(
     to bottom,
     rgba(147, 88, 255, 0.7) 0%,

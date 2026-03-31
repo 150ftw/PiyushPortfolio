@@ -132,7 +132,8 @@ const Layout = ({ children, isMobile, mouseX, mouseY }) => {
             { name: 'About', path: '/about' },
             { name: 'Work', path: '/work' },
             { name: 'Expertise', path: '/expertise' },
-            { name: 'Contact', path: '/inquiry' }
+            { name: 'Contact', path: '/contact' },
+            { name: 'Book Now', path: '/inquiry' }
           ].map((item) => (
             <Link
               key={item.name}
@@ -158,7 +159,7 @@ const Layout = ({ children, isMobile, mouseX, mouseY }) => {
       {/* Footer */}
       <footer id="footer">
         <div className="container footer-content">
-          <Link to="/inquiry" className="contact-link" style={{ textDecoration: 'none' }}>
+          <Link to="/contact" className="contact-link" style={{ textDecoration: 'none' }}>
             <motion.span
               className="contact-cta-label"
               initial={{ opacity: 0, y: 20 }}
@@ -313,3 +314,5 @@ const Layout = ({ children, isMobile, mouseX, mouseY }) => {
 };
 
 export default Layout;
+
+// Note: Ensure the form is clearly branded for project bookings.

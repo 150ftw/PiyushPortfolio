@@ -20,32 +20,47 @@ const FluctuatingText = ({ text, delayOffset = 0 }) => {
   const chars = Array.from(text);
   
   return (
-    <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', color: '#fff' }}>
+    <div style={{ position: 'relative', display: 'flex', flexWrap: 'wrap', justifyContent: 'center', color: '#fff', overflow: 'hidden', padding: '10px 0' }}>
+      {/* Shine Sweep Layer */}
+      <motion.div 
+        className="shine-sweep-layer"
+        animate={{ left: ['-100%', '200%'] }}
+        transition={{ 
+          duration: 3, 
+          repeat: Infinity, 
+          repeatDelay: 6 + Math.random() * 4,
+          ease: "easeInOut"
+        }}
+      />
+      
       {chars.map((char, i) => (
         <motion.span
           key={i}
           animate={{ 
-            opacity: [1, 0.8, 1],
+            opacity: [1, 0.9, 1],
             textShadow: [
-              '0 0 0px rgba(168, 85, 247, 0)',
-              '0 0 15px rgba(168, 85, 247, 0.8)',
-              '0 0 0px rgba(168, 85, 247, 0)',
+              '0 0 10px rgba(168, 85, 247, 0.1)',
+              '0 0 25px rgba(168, 85, 247, 0.8)',
+              '0 0 40px rgba(168, 85, 247, 0.4)',
+              '0 0 10px rgba(168, 85, 247, 0.1)',
             ],
-            scale: [1, 1.05, 1],
+            scale: [1, 1.08, 1.02, 1],
+            filter: ['brightness(1)', 'brightness(2)', 'brightness(1.5)', 'brightness(1)'],
           }}
           transition={{
-            duration: 4,
+            duration: 3,
             repeat: Infinity,
             repeatType: "mirror",
-            repeatDelay: 2 + Math.random() * 2,
-            delay: i * 0.1 + delayOffset,
+            repeatDelay: 5 + Math.random() * 5,
+            delay: i * 0.08 + delayOffset,
             ease: "easeInOut"
           }}
           style={{ 
             display: 'inline-block', 
             whiteSpace: char === ' ' ? 'pre' : 'normal',
             lineHeight: '1',
-            margin: '0 -1px'
+            letterSpacing: '0.02em',
+            willChange: 'transform, opacity, filter, text-shadow'
           }}
         >
           {char}

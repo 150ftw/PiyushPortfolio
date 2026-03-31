@@ -206,9 +206,10 @@ const Layout = ({ children, isMobile, mouseX, mouseY }) => {
             {!isMobile && (
               <motion.div
                 className="footer-spotlight-fixture"
-                initial={{ opacity: 0 }}
+                initial={{ opacity: 0, x: "-50%" }}
                 animate={{
                   opacity: hoveredIndex !== null ? 1 : 0,
+                  x: "-50%",
                   rotate: hoveredIndex === 0 ? -15 : hoveredIndex === 1 ? 0 : hoveredIndex === 2 ? 15 : 0
                 }}
                 transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}

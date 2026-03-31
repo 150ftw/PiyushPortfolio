@@ -159,6 +159,22 @@ nav.scrolled {
   pointer-events: none;
 }
 
+#app-container {
+  overflow: visible; /* Required for sticky children */
+  position: relative;
+}
+
+/* Unified Body Styles for Sticky Support */
+body {
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: 'Inter', sans-serif;
+  line-height: 1.6;
+  overflow-x: hidden;
+  overflow-y: visible !important;
+  -webkit-font-smoothing: antialiased;
+}
+
 .menu-overlay.active {
   transform: translateY(0);
   visibility: visible;
@@ -240,7 +256,7 @@ nav.scrolled {
 /* Horizontal Scroll Container */
 .horizontal-scroll-section {
   position: relative;
-  height: 400vh;
+  height: 600vh; /* Increased vertical track for horizontal scroll */
 }
 
 @media (max-width: 768px) {
@@ -287,7 +303,7 @@ nav.scrolled {
 }
 
 .expertise-stack-container {
-  height: 600vh;
+  height: 1000vh; /* Final extended track for absolute pinning persistence */
   position: relative;
 }
 
@@ -301,34 +317,71 @@ nav.scrolled {
   position: sticky;
   top: 0;
   height: 100vh;
-  display: flex;
+  display: grid;
+  grid-template-columns: 1fr 1fr; /* Split Title | Cards */
   align-items: center;
+  padding: 0 10vw;
+  grid-template-columns: 1fr 1fr; /* Side-by-side: Title | Cards */
+  align-items: center;
+  padding: 0 8vw;
   overflow: hidden;
+  background: var(--bg-primary);
 }
 
-@media (max-width: 768px) {
-  .expertise-stack-sticky {
-    position: relative;
-    height: auto;
-    display: block;
-    overflow: visible;
-    padding: 60px 20px;
-  }
+.expertise-header-container {
+  padding-right: 5vw;
+}
+
+.expertise-cards-stack {
+  position: relative;
+  height: 600px; /* Fixed window for the relative stacking cards */
+  width: 100%;
 }
 
 .expertise-card-frame {
   position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 80%;
-  max-width: 800px;
-  background: rgba(0, 0, 0, 0.8);
+  top: 0;
+  left: 0;
+  width: 100%;
+  background: rgba(15, 15, 15, 0.8);
   backdrop-filter: blur(20px);
-  padding: 60px;
-  border-radius: 30px;
+  padding: 40px;
+  border-radius: 20px;
   border: 1px solid rgba(255, 255, 255, 0.1);
-  box-shadow: 0 40px 100px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5);
+}
+
+/* Mobile Fallback: Full-width stacked */
+@media (max-width: 768px) {
+  .expertise-stack-sticky {
+    display: block;
+    height: auto;
+    position: relative;
+    padding: 60px 20px;
+  }
+  
+  .expertise-header-container {
+    margin-bottom: 40px;
+    padding: 0;
+  }
+  
+  .expertise-cards-stack {
+    height: auto;
+  }
+  
+  .expertise-card-frame-mobile {
+    background: rgba(20, 20, 20, 0.9);
+    padding: 30px;
+    border-radius: 15px;
+    margin-bottom: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+  }
+  
+  .expertise-card-frame-mobile h4 {
+    color: var(--accent-purple);
+    font-size: 1.5rem;
+    margin-bottom: 10px;
+  }
 }
 
 @media (max-width: 768px) {

@@ -54,10 +54,17 @@ const ExpertiseCard = ({ item, index, progress, total }) => {
     const start = index * step;
     const end = (index + 1) * step;
     
-    // Smooth transitions between cards
-    const opacity = useTransform(progress, [start, start + 0.1, end - 0.1, end], [0, 1, 1, 0]);
-    const scale = useTransform(progress, [start, start + 0.1, end - 0.1, end], [0.8, 1, 1, 0.8]);
-    const y = useTransform(progress, [start, start + 0.1, end - 0.1, end], [50, 0, 0, -50]);
+    // Overlapping ranges for perfectly continuous cross-fade (no black screens)
+    // Larger Y translation ensures Card A's description clears before Card B's title arrives
+    const inStart = Math.max(0, index * step - 0.05);
+    const inEnd = index * step + 0.03;
+    const outStart = (index + 1) * step - 0.03;
+    const outEnd = Math.min(1, (index + 1) * step + 0.05);
+
+    // Provide strict, unique interpolation points for Framer Motion to prevent crashes
+    const opacity = useTransform(progress, [inStart, inEnd, outStart, outEnd], [0, 1, 1, 0]);
+    const scale = useTransform(progress, [inStart, inEnd, outStart, outEnd], [0.85, 1, 1, 0.85]);
+    const y = useTransform(progress, [inStart, inEnd, outStart, outEnd], [150, 0, 0, -150]);
 
     return (
         <motion.div 
@@ -108,9 +115,12 @@ const App = () => {
     offset: ["start start", "end end"]
   });
   
-  const xTranslate = useTransform(workProgress, [0, 1], ["0%", "-65%"]);
+  // Use exact vw translation to perfectly center the final project and prevent it from looking "half cut"
+  const xTranslate = useTransform(workProgress, [0, 1], ["0vw", "-140vw"]);
+  // This opacity smoothly fades the entire project gallery out at the very end to satisfy "vanishes from that section"
+  const workOpacity = useTransform(workProgress, [0.95, 1], [1, 0]);
   // Fixed "ALBUMS" parallax math: ensure it stays centered
-  const albumTextX = useTransform(workProgress, [0, 1], ["-20%", "20%"]);
+  const albumTextX = useTransform(workProgress, [0, 1], ["-10%", "10%"]);
 
   // Expertise Stacking Logic
   const expertiseRef = useRef(null);
@@ -126,6 +136,13 @@ const App = () => {
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
+
+  const expertiseItems = [
+    { title: "SHORT-FORM", desc: "Viral-ready Reels and Shorts optimized for retention." },
+    { title: "YOUTUBE", desc: "Advanced storytelling and dynamic pacing for scaling channels." },
+    { title: "COLOR GRADING", desc: "High-end cinematic color palettes in DaVinci Resolve." },
+    { title: "MOTION GRAPHICS", desc: "Kinetic typography and custom After Effects VFX." }
+  ];
 
   useEffect(() => {
     if (marqueeRef.current) {
@@ -147,7 +164,7 @@ const App = () => {
 
   return (
     <ReactLenis root options={{ lerp: 0.1, duration: 1.5, smoothWheel: true }}>
-      <div id="app-container" style={{ position: 'relative', overflowX: 'hidden', background: '#000' }}>
+      <div id="app-container" style={{ position: 'relative', background: '#000' }}>
         {/* Cinematic Mouse Glow */}
         {!isMobile && (
             <motion.div 
@@ -296,7 +313,7 @@ const App = () => {
 
         {/* Work Section - Sticky Horizontal Scroll Experience */}
         <section ref={workRef} className="horizontal-scroll-section" id="work">
-            <div className="sticky-wrapper">
+            <motion.div className="sticky-wrapper" style={{ opacity: workOpacity }}>
                 {!isMobile && (
                     <motion.div 
                         className="parallax-bg-text"
@@ -350,47 +367,41 @@ const App = () => {
                         </motion.a>
                     ))}
                 </motion.div>
-            </div>
+            </motion.div>
         </section>
 
         {/* Expertise Section - Sticky Stack Experience */}
         <section ref={expertiseRef} className="expertise-stack-container" id="expertise">
             <div className="expertise-stack-sticky">
-                <div style={isMobile ? { padding: '40px 0' } : { position: 'absolute', top: '10%', left: '5%', zIndex: 10 }}>
-                    <h2 className="section-title" style={{ fontSize: isMobile ? '3.5rem' : '5vw' }}>
+                {/* Column 1: Static Header */}
+                <div className="expertise-header-container">
+                    <h2 className="section-title reveal" style={{ fontSize: isMobile ? '3rem' : '4.5vw', textAlign: 'left', margin: 0 }}>
                         <MaskText>Core</MaskText><br/>
                         <MaskText className="text-accent">Expertise</MaskText>
                     </h2>
                 </div>
 
-                {!isMobile ? [
-                    { title: "SHORT-FORM", desc: "Viral-ready Reels and Shorts optimized for retention." },
-                    { title: "YOUTUBE", desc: "Advanced storytelling and dynamic pacing for scaling channels." },
-                    { title: "COLOR GRADING", desc: "High-end cinematic color palettes in DaVinci Resolve." },
-                    { title: "MOTION GRAPHICS", desc: "Kinetic typography and custom After Effects VFX." }
-                ].map((item, i, arr) => (
-                    <ExpertiseCard 
-                        key={i} 
-                        item={item} 
-                        index={i} 
-                        progress={expProgress} 
-                        total={arr.length} 
-                    />
-                )) : (
-                    <div className="expertise-list-mobile" style={{ padding: '0 20px' }}>
-                        {[
-                            { title: "SHORT-FORM", desc: "Viral-ready Reels and Shorts optimized for retention." },
-                            { title: "YOUTUBE", desc: "Advanced storytelling and dynamic pacing for scaling channels." },
-                            { title: "COLOR GRADING", desc: "High-end cinematic color palettes in DaVinci Resolve." },
-                            { title: "MOTION GRAPHICS", desc: "Kinetic typography and custom After Effects VFX." }
-                        ].map((item, i) => (
-                            <div key={i} className="expertise-card-frame" style={{ position: 'relative', transform: 'none', width: '100%', opacity: 1, scale: 1, marginBottom: '30px' }}>
-                                <h4 style={{ color: 'var(--accent-purple)', fontSize: '1.8rem', marginBottom: '15px' }}>{item.title}</h4>
-                                <p style={{ fontSize: '1.1rem', opacity: 0.8, lineHeight: '1.6' }}>{item.desc}</p>
-                            </div>
-                        ))}
-                    </div>
-                )}
+                {/* Column 2: Moving Stack */}
+                <div className="expertise-cards-stack">
+                    {!isMobile ? expertiseItems.map((item, index) => (
+                        <ExpertiseCard 
+                            key={index} 
+                            item={item} 
+                            index={index} 
+                            progress={expProgress} 
+                            total={expertiseItems.length}
+                        />
+                    )) : (
+                        <div className="expertise-list-mobile">
+                            {expertiseItems.map((item, index) => (
+                                <div key={index} className="expertise-card-frame-mobile">
+                                    <h4>{item.title}</h4>
+                                    <p>{item.desc}</p>
+                                </div>
+                            ))}
+                        </div>
+                    )}
+                </div>
             </div>
         </section>
 

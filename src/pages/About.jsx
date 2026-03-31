@@ -54,7 +54,7 @@ const About = () => {
                                 <img
                                     src="/assets/piyush.png"
                                     alt="Piyush Rawat"
-                                    style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block', filter: 'contrast(1.1) brightness(1.05)' }}
+                                    style={{ width: '100%', height: '100%', objectFit: 'contain', display: 'block', filter: 'contrast(1.1) brightness(1.05)' }}
                                 />
                             </div>
                         </motion.div>

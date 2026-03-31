@@ -112,6 +112,7 @@ nav.scrolled {
   backdrop-filter: blur(15px);
   -webkit-backdrop-filter: blur(15px);
   border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  z-index: 1001;
 }
 
 .nav-name {
@@ -163,6 +164,7 @@ nav.scrolled {
   visibility: visible;
   opacity: 1;
   pointer-events: all;
+  z-index: 1000;
 }
 
 .menu-links {

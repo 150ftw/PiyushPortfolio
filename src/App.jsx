@@ -1,5 +1,6 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { motion, useScroll, useTransform, useSpring } from 'framer-motion';
+import { ReactLenis } from 'lenis/react';
 import Beams from './components/Beams';
 
 // Animation Variants
@@ -13,6 +14,15 @@ const fadeInUp = {
   }
 };
 
+const maskReveal = {
+    hidden: { y: "100%", skewY: 10 },
+    visible: {
+        y: 0,
+        skewY: 0,
+        transition: { duration: 1, ease: [0.16, 1, 0.3, 1] }
+    }
+};
+
 const staggerContainer = {
   hidden: { opacity: 0 },
   visible: {
@@ -24,39 +34,19 @@ const staggerContainer = {
   }
 };
 
-const charReveal = {
-  hidden: { opacity: 0, y: 20, filter: 'blur(5px)' },
-  visible: {
-    opacity: 1,
-    y: 0,
-    filter: 'blur(0px)',
-    transition: { duration: 0.5, ease: 'easeOut' }
-  }
-};
-
-const CharacterReveal = ({ text, className = "" }) => {
-  const letters = Array.from(text);
-  return (
-    <motion.span
-      className={className}
-      variants={staggerContainer}
-      initial="hidden"
-      whileInView="visible"
-      viewport={{ once: true }}
-      style={{ display: 'inline-block' }}
-    >
-      {letters.map((char, i) => (
-        <motion.span
-          key={i}
-          variants={charReveal}
-          style={{ display: 'inline-block', whiteSpace: 'pre' }}
+const MaskText = ({ children, className = "" }) => (
+    <span className={`mask-container ${className}`}>
+        <motion.span 
+            className="mask-text"
+            variants={maskReveal}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-10%" }}
         >
-          {char}
+            {children}
         </motion.span>
-      ))}
-    </motion.span>
-  );
-};
+    </span>
+);
 
 const App = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -76,10 +66,22 @@ const App = () => {
     return () => window.removeEventListener('mousemove', handleMouseMove);
   }, []);
 
-  // Parallax Logic for Section Headers
-  const { scrollY } = useScroll();
-  const bgTextY = useTransform(scrollY, [1000, 3000], [-100, 100]);
-  const heroY = useTransform(scrollY, [0, 500], [0, 100]);
+  // Horizontal Scroll Logic (Selected Work)
+  const workRef = useRef(null);
+  const { scrollYProgress: workProgress } = useScroll({
+    target: workRef,
+    offset: ["start start", "end end"]
+  });
+  
+  const xTranslate = useTransform(workProgress, [0, 1], ["0%", "-65%"]);
+  const albumTextX = useTransform(workProgress, [0, 1], ["-10%", "130%"]);
+
+  // Expertise Stacking Logic
+  const expertiseRef = useRef(null);
+  const { scrollYProgress: expProgress } = useScroll({
+    target: expertiseRef,
+    offset: ["start start", "end end"]
+  });
 
   useEffect(() => {
     const handleScroll = () => {
@@ -107,7 +109,8 @@ const App = () => {
   };
 
   return (
-    <div id="app-container" style={{ position: 'relative', overflowX: 'hidden' }}>
+    <ReactLenis root>
+      <div id="app-container" style={{ position: 'relative', overflowX: 'hidden', background: '#000' }}>
         {/* Cinematic Mouse Glow */}
         <motion.div 
             className="cursor-glow"
@@ -121,7 +124,7 @@ const App = () => {
             className="menu-toggle" 
             onClick={toggleMenu}
             whileTap={{ scale: 0.9 }}
-            style={{ cursor: 'pointer', zIndex: 1001, pointerEvents: 'all' }}
+            style={{ cursor: 'pointer', zIndex: 1020, pointerEvents: 'all' }}
           >
             <div className="menu-line" style={isMenuOpen ? { transform: 'translateY(5px) rotate(45deg)', background: 'white' } : { background: 'white' }}></div>
             <div className="menu-line" style={isMenuOpen ? { transform: 'translateY(-5px) rotate(-45deg)', background: 'white' } : { background: 'white' }}></div>
@@ -134,7 +137,8 @@ const App = () => {
             style={{ 
                 pointerEvents: isMenuOpen ? 'all' : 'none', 
                 visibility: isMenuOpen ? 'visible' : 'hidden',
-                opacity: isMenuOpen ? 1 : 0
+                opacity: isMenuOpen ? 1 : 0,
+                zIndex: 1010
             }}
         >
           <motion.div 
@@ -172,20 +176,21 @@ const App = () => {
               rotation={30}
             />
           </div>
-          <motion.div className="container hero-content" style={{ position: 'relative', zIndex: 1, y: heroY }}>
+          <div className="container hero-content" style={{ position: 'relative', zIndex: 1 }}>
             <h1 className="hero-title" style={{ display: 'flex', flexDirection: 'column' }}>
-                <CharacterReveal text="LET'S CREATE" />
-                <CharacterReveal text="VIDEOS PEOPLE" />
-                <span style={{ display: 'block' }}>
-                    <CharacterReveal text="ACTUALLY " />
-                    <CharacterReveal text="WATCH" className="text-accent" />
-                </span>
+                <MaskText>LET'S CREATE</MaskText>
+                <MaskText>VIDEOS PEOPLE</MaskText>
+                <div style={{ display: 'flex', gap: '20px' }}>
+                    <MaskText>ACTUALLY </MaskText>
+                    <MaskText className="text-accent">WATCH</MaskText>
+                </div>
             </h1>
             
             <motion.div 
               className="hero-stats"
               initial="hidden"
-              animate="visible"
+              whileInView="visible"
+              viewport={{ once: true }}
               variants={staggerContainer}
             >
               <motion.div className="stat-item" variants={fadeInUp} whileHover={{ y: -5 }}>
@@ -197,19 +202,19 @@ const App = () => {
                 <span className="stat-label">Client <br /> Satisfaction</span>
               </motion.div>
             </motion.div>
-          </motion.div>
+          </div>
         </section>
 
         {/* Marquee Section */}
         <motion.div 
           className="marquee-container"
-          initial={{ opacity: 0, scale: 0.95 }}
-          whileInView={{ opacity: 1, scale: 1 }}
+          initial={{ opacity: 0, filter: 'blur(10px)' }}
+          whileInView={{ opacity: 1, filter: 'blur(0px)' }}
           viewport={{ once: true }}
           transition={{ duration: 1 }}
         >
           <div className="marquee-content" ref={marqueeRef}>
-            {["Brands & Creators I have worked with", "✦", "Hershey's", "✦", "Tech Burner", "✦", "Netflix India", "✦", "Red Bull Gaming", "✦", "Unacademy", "✦"].map((item, i) => (
+            {["Brands & Creators", "✦", "Hershey's", "✦", "Tech Burner", "✦", "Netflix India", "✦", "Red Bull Gaming", "✦", "Unacademy", "✦"].map((item, i) => (
                 <span key={i} className="marquee-item">{item}</span>
             ))}
           </div>
@@ -219,9 +224,9 @@ const App = () => {
         <section className="section-padding" id="about">
           <div className="container" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '60px', alignItems: 'start' }}>
             <h2 className="section-title">
-               <CharacterReveal text="Clean" /><br/>
-               <CharacterReveal text="Engaging" /><br/>
-               <span className="text-accent"><CharacterReveal text="High-Retention" /></span>
+               <MaskText>Performance</MaskText><br/>
+               <MaskText>Meets</MaskText><br/>
+               <MaskText className="text-accent">High-Retention</MaskText>
             </h2>
             <motion.div 
               className="about-text"
@@ -233,10 +238,10 @@ const App = () => {
               <motion.p style={{ marginBottom: '30px' }} variants={fadeInUp}>
                 I am Piyush Rawat, a video editor focused on creating clean, engaging, and high-retention content. I work with creators and brands to transform raw footage into polished videos that capture attention and keep it.
               </motion.p>
-              <motion.p style={{ marginBottom: '30px', fontSize: '0.9rem', letterSpacing: '1px', opacity: 0.7 }} variants={fadeInUp}>
+              <motion.div style={{ marginBottom: '30px', fontSize: '0.9rem', letterSpacing: '1px', opacity: 0.7 }} variants={fadeInUp}>
                 LOCATION: GHAZIABAD, INDIA <br />
                 AVAILABILITY: OPEN FOR FREELANCE PROJECTS
-              </motion.p>
+              </motion.div>
               <motion.a 
                 href="#footer" 
                 variants={fadeInUp}
@@ -250,96 +255,102 @@ const App = () => {
           </div>
         </section>
 
-        {/* Projects Grid with Parallax Backdrop */}
-        <section className="projects-section section-padding" id="projects" style={{ position: 'relative' }}>
-          <motion.div 
-            className="parallax-bg-text"
-            style={{ y: bgTextY }}
-          >
-            EDITS
-          </motion.div>
-          
-          <div className="container" style={{ position: 'relative', zIndex: 1 }}>
-            <h2 className="section-title" style={{ marginBottom: '100px' }}>
-                <CharacterReveal text="Selected" /><br/>
-                <span className="text-accent"><CharacterReveal text="Work" /></span>
-            </h2>
-            <motion.div 
-              className="projects-grid"
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true, margin: "-50px" }}
-              variants={staggerContainer}
-            >
-              {[
-                { title: "Hershey's Campaign", tags: ["Commercial", "Brand Film"], img: "/assets/project1.png" },
-                { title: "Valorant Montage", tags: ["Gaming", "Cinematic"], img: "/assets/project2.png" },
-                { title: "2024 Showreel", tags: ["Highlights", "Official"], img: "/assets/project3.png" },
-                { title: "Retention Strategy", tags: ["YouTube", "Long-Form"], img: "/assets/project4.png" }
-              ].map((proj, i) => (
-                <motion.a 
-                  key={i} 
-                  href="#"
-                  className="project-card"
-                  variants={fadeInUp}
-                  whileHover={{ y: -10 }}
-                  style={{ display: 'block' }}
+        {/* Work Section - Sticky Horizontal Scroll Experience */}
+        <section ref={workRef} className="horizontal-scroll-section" id="work">
+            <div className="sticky-wrapper">
+                <motion.div 
+                    className="parallax-bg-text"
+                    style={{ x: albumTextX, top: '50%', transform: 'translateY(-50%)', opacity: 0.05 }}
                 >
-                  <div className="project-img-wrapper">
-                    <motion.img 
-                      src={proj.img} 
-                      alt={proj.title} 
-                      className="project-img" 
-                      whileHover={{ scale: 1.1 }}
-                      transition={{ duration: 0.6 }}
-                    />
-                    <div className="play-hint"></div>
-                  </div>
-                  <div className="project-info">
-                    <h3 className="project-title">{proj.title}</h3>
-                    <div className="project-tags">
-                      {proj.tags.map(tag => <span key={tag} className="tag">{tag}</span>)}
+                    ALBUMS
+                </motion.div>
+                
+                <motion.div className="horizontal-content" style={{ x: xTranslate }}>
+                    <div style={{ minWidth: '40vw' }}>
+                        <h2 className="section-title" style={{ fontSize: '8vw' }}>
+                            <MaskText>Selected</MaskText><br/>
+                            <MaskText className="text-accent">Work</MaskText>
+                        </h2>
                     </div>
-                  </div>
-                </motion.a>
-              ))}
-            </motion.div>
-          </div>
+
+                    {[
+                        { title: "Hershey's Campaign", tags: ["Commercial", "Brand Film"], img: "/assets/project1.png" },
+                        { title: "Valorant Montage", tags: ["Gaming", "Cinematic"], img: "/assets/project2.png" },
+                        { title: "2024 Showreel", tags: ["Highlights", "Official"], img: "/assets/project3.png" },
+                        { title: "Retention Strategy", tags: ["YouTube", "Long-Form"], img: "/assets/project4.png" }
+                    ].map((proj, i) => (
+                        <motion.a 
+                            key={i} 
+                            href="#"
+                            className="project-card"
+                            style={{ 
+                                minWidth: '35vw', 
+                                height: '60vh', 
+                                marginTop: i % 2 === 0 ? '-5vh' : '5vh',
+                                scale: i === 0 ? 1 : 0.95
+                            }}
+                            whileHover={{ scale: 1.02 }}
+                        >
+                            <div className="project-img-wrapper" style={{ height: '100%', borderRadius: '20px' }}>
+                                <motion.img 
+                                    src={proj.img} 
+                                    alt={proj.title} 
+                                    className="project-img" 
+                                    style={{ height: '100%', width: '100%', objectFit: 'cover' }}
+                                />
+                                <div className="play-hint"></div>
+                            </div>
+                            <div className="project-info" style={{ marginTop: '20px' }}>
+                                <h3 className="project-title" style={{ fontSize: '1.5rem' }}>{proj.title}</h3>
+                                <div className="project-tags">
+                                    {proj.tags.map(tag => <span key={tag} className="tag">{tag}</span>)}
+                                </div>
+                            </div>
+                        </motion.a>
+                    ))}
+                </motion.div>
+            </div>
         </section>
 
-        {/* Expertise Section - Cinematic Sticky Sequence */}
-        <section className="section-padding">
-          <div className="container expertise-container">
-            <div className="expertise-heading-sticky">
-                <h2 className="section-title">
-                    <CharacterReveal text="Core" /><br/>
-                    <CharacterReveal text="Expertise" />
-                </h2>
-                <p className="text-muted" style={{ marginTop: '20px', maxWidth: '300px' }}>
-                    Specialized workflows designed for high-end digital creators and brands.
-                </p>
+        {/* Expertise Section - Sticky Stack Experience */}
+        <section ref={expertiseRef} className="expertise-stack-container" id="expertise">
+            <div className="expertise-stack-sticky">
+                <div style={{ position: 'absolute', top: '10%', left: '5%', zIndex: 10 }}>
+                    <h2 className="section-title" style={{ fontSize: '5vw' }}>
+                        <MaskText>Core</MaskText><br/>
+                        <MaskText className="text-accent">Expertise</MaskText>
+                    </h2>
+                </div>
+
+                {[
+                    { title: "SHORT-FORM", desc: "Viral-ready Reels and Shorts optimized for retention.", bg: "rgba(168, 85, 247, 0.1)" },
+                    { title: "YOUTUBE", desc: "Advanced storytelling and dynamic pacing for scaling channels.", bg: "rgba(255, 0, 0, 0.05)" },
+                    { title: "COLOR GRADING", desc: "High-end cinematic color palettes in DaVinci Resolve.", bg: "rgba(0, 255, 255, 0.05)" },
+                    { title: "MOTION GRAPHICS", desc: "Kinetic typography and custom After Effects VFX.", bg: "rgba(255, 255, 255, 0.05)" }
+                ].map((item, i) => {
+                    const step = 1 / 4;
+                    const start = i * step;
+                    const end = (i + 1) * step;
+                    
+                    // eslint-disable-next-line react-hooks/rules-of-hooks
+                    const opacity = useTransform(expProgress, [start, start + 0.05, end - 0.05, end], [0, 1, 1, 0]);
+                    // eslint-disable-next-line react-hooks/rules-of-hooks
+                    const scale = useTransform(expProgress, [start, start + 0.05, end - 0.05, end], [0.8, 1, 1, 0.8]);
+                    // eslint-disable-next-line react-hooks/rules-of-hooks
+                    const y = useTransform(expProgress, [start, start + 0.05, end - 0.05, end], [50, 0, 0, -50]);
+
+                    return (
+                        <motion.div 
+                            key={i}
+                            className="expertise-card-frame"
+                            style={{ opacity, scale, y }}
+                        >
+                            <h4 style={{ color: 'var(--accent-purple)', fontSize: '2.5rem', marginBottom: '20px' }}>{item.title}</h4>
+                            <p style={{ fontSize: '1.4rem', opacity: 0.8, lineHeight: '1.6' }}>{item.desc}</p>
+                        </motion.div>
+                    );
+                })}
             </div>
-            
-            <motion.div 
-              className="expertise-scroll-list"
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true }}
-              variants={staggerContainer}
-            >
-              {[
-                { title: "SHORT-FORM CONTENT", desc: "Viral-ready Reels and Shorts optimized for retention and extreme audience engagement using advanced pacing techniques." },
-                { title: "YOUTUBE EDITING", desc: "Advanced storytelling and dynamic pacing for creators looking to scale their channels with cinematic production value." },
-                { title: "COLOR GRADING", desc: "High-end color palettes developed in DaVinci Resolve that establish unique brand moods and premium cinematic quality." },
-                { title: "MOTION GRAPHICS", desc: "Sophisticated After Effects animations, kinetic typography, and custom VFX that elevate technical narratives." }
-              ].map((item, i) => (
-                <motion.div key={i} className="expertise-item-frame" variants={fadeInUp}>
-                  <h4 style={{ fontFamily: 'Outfit', color: 'var(--accent-purple)', fontSize: '1.5rem', marginBottom: '15px' }}>{item.title}</h4>
-                  <p className="text-muted" style={{ fontSize: '1.1rem', lineHeight: '1.6' }}>{item.desc}</p>
-                </motion.div>
-              ))}
-            </motion.div>
-          </div>
         </section>
 
         {/* Footer */}
@@ -348,40 +359,28 @@ const App = () => {
             <motion.a 
               href="mailto:hello@piyushrawat.com" 
               className="contact-link"
-              initial={{ opacity: 0, y: 100 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}
+              style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}
             >
-              <CharacterReveal text="GET IN TOUCH" />
+              <MaskText>GET IN TOUCH</MaskText>
               <motion.span 
                 initial={{ opacity: 0 }}
                 whileInView={{ opacity: 1 }}
                 transition={{ delay: 0.5 }}
+                style={{ fontSize: '1.5rem', color: 'var(--accent-purple)' }}
               >
                 START YOUR PROJECT TODAY →
               </motion.span>
             </motion.a>
-            <motion.div 
-              style={{ marginTop: '40px', fontFamily: 'Inria Serif', opacity: 0.6 }}
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 0.6 }}
-              viewport={{ once: true }}
-            >
-              GHAZIABAD, INDIA | AVAILABLE WORLDWIDE
-            </motion.div>
-            <motion.p 
-              className="text-muted" 
-              style={{ marginTop: '40px', fontWeight: 600, letterSpacing: '2px' }}
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-              viewport={{ once: true }}
-            >
-              &copy; {new Date().getFullYear()} PIYUSH RAWAT. VIDEO EDITOR.
-            </motion.p>
+            
+            <div style={{ marginTop: '100px', display: 'flex', justifyContent: 'space-between', width: '100%', opacity: 0.6 }}>
+                <div>GHAZIABAD, INDIA</div>
+                <div>AVAILABLE WORLDWIDE</div>
+                <div>&copy; {new Date().getFullYear()} PIYUSH RAWAT</div>
+            </div>
           </div>
         </footer>
       </div>
+    </ReactLenis>
   );
 };
 

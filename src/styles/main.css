@@ -226,29 +226,66 @@ nav.scrolled {
   margin-top: 20px;
 }
 
-.expertise-container {
+.mask-container {
+  overflow: hidden;
+  display: block;
+}
+
+.mask-text {
+  display: block;
+}
+
+/* Horizontal Scroll Container */
+.horizontal-scroll-section {
+  position: relative;
+  height: 400vh; /* Determines the vertical scroll space for horizontal movement */
+}
+
+.sticky-wrapper {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  width: 100%;
+  overflow: hidden;
   display: flex;
-  gap: 80px;
+  align-items: center;
+}
+
+.horizontal-content {
+  display: flex;
+  gap: 15vw;
+  padding: 0 10vw;
+  align-items: center;
+  will-change: transform;
+}
+
+.expertise-stack-container {
+  height: 600vh; /* Long scroll distance for stacking frames */
   position: relative;
 }
 
-.expertise-heading-sticky {
-  flex: 1;
+.expertise-stack-sticky {
   position: sticky;
-  top: 150px;
-  height: fit-content;
-}
-
-.expertise-scroll-list {
-  flex: 1;
-}
-
-.expertise-item-frame {
-  height: 400px;
+  top: 0;
+  height: 100vh;
   display: flex;
-  flex-direction: column;
-  justify-content: center;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  align-items: center;
+  overflow: hidden;
+}
+
+.expertise-card-frame {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 80%;
+  max-width: 800px;
+  background: rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(20px);
+  padding: 60px;
+  border-radius: 30px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 40px 100px rgba(0, 0, 0, 0.5);
 }
 
 .cursor-glow {

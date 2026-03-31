@@ -1,15 +1,15 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { motion, useScroll, useTransform } from 'framer-motion';
+import { motion, useScroll, useTransform, useSpring } from 'framer-motion';
 import Beams from './components/Beams';
 
 // Animation Variants
 const fadeInUp = {
-  hidden: { opacity: 0, y: 40, filter: 'blur(10px)' },
+  hidden: { opacity: 0, y: 40, filter: 'blur(15px)' },
   visible: { 
     opacity: 1, 
     y: 0,
     filter: 'blur(0px)',
-    transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] }
+    transition: { duration: 1, ease: [0.16, 1, 0.3, 1] }
   }
 };
 
@@ -62,10 +62,24 @@ const App = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
   const marqueeRef = useRef(null);
+  
+  // Mouse Glow Logic
+  const mouseX = useSpring(0, { stiffness: 50, damping: 20 });
+  const mouseY = useSpring(0, { stiffness: 50, damping: 20 });
 
-  // Use scroll for subtle background movement
+  useEffect(() => {
+    const handleMouseMove = (e) => {
+      mouseX.set(e.clientX - 150);
+      mouseY.set(e.clientY - 150);
+    };
+    window.addEventListener('mousemove', handleMouseMove);
+    return () => window.removeEventListener('mousemove', handleMouseMove);
+  }, []);
+
+  // Parallax Logic for Section Headers
   const { scrollY } = useScroll();
-  const y1 = useTransform(scrollY, [0, 500], [0, 100]);
+  const bgTextY = useTransform(scrollY, [1000, 3000], [-100, 100]);
+  const heroY = useTransform(scrollY, [0, 500], [0, 100]);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -93,7 +107,13 @@ const App = () => {
   };
 
   return (
-    <div id="app-container" style={{ position: 'relative' }}>
+    <div id="app-container" style={{ position: 'relative', overflowX: 'hidden' }}>
+        {/* Cinematic Mouse Glow */}
+        <motion.div 
+            className="cursor-glow"
+            style={{ x: mouseX, y: mouseY }}
+        />
+
         {/* Navigation */}
         <nav className={isScrolled ? 'scrolled' : ''} style={{ pointerEvents: 'all' }}>
           <div className="nav-name">Piyush Rawat</div>
@@ -108,7 +128,7 @@ const App = () => {
           </motion.div>
         </nav>
 
-        {/* Menu Overlay - Fixed Pointer Events */}
+        {/* Menu Overlay */}
         <div 
             className={`menu-overlay ${isMenuOpen ? 'active' : ''}`}
             style={{ 
@@ -152,7 +172,7 @@ const App = () => {
               rotation={30}
             />
           </div>
-          <motion.div className="container hero-content" style={{ position: 'relative', zIndex: 1, y: y1 }}>
+          <motion.div className="container hero-content" style={{ position: 'relative', zIndex: 1, y: heroY }}>
             <h1 className="hero-title" style={{ display: 'flex', flexDirection: 'column' }}>
                 <CharacterReveal text="LET'S CREATE" />
                 <CharacterReveal text="VIDEOS PEOPLE" />
@@ -230,10 +250,17 @@ const App = () => {
           </div>
         </section>
 
-        {/* Projects Grid */}
-        <section className="projects-section section-padding" id="projects">
-          <div className="container">
-            <h2 className="section-title" style={{ marginBottom: '40px' }}>
+        {/* Projects Grid with Parallax Backdrop */}
+        <section className="projects-section section-padding" id="projects" style={{ position: 'relative' }}>
+          <motion.div 
+            className="parallax-bg-text"
+            style={{ y: bgTextY }}
+          >
+            EDITS
+          </motion.div>
+          
+          <div className="container" style={{ position: 'relative', zIndex: 1 }}>
+            <h2 className="section-title" style={{ marginBottom: '100px' }}>
                 <CharacterReveal text="Selected" /><br/>
                 <span className="text-accent"><CharacterReveal text="Work" /></span>
             </h2>
@@ -280,29 +307,35 @@ const App = () => {
           </div>
         </section>
 
-        {/* Expertise Section */}
+        {/* Expertise Section - Cinematic Sticky Sequence */}
         <section className="section-padding">
-          <div className="container" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '60px' }}>
-            <h2 className="section-title">
-                <CharacterReveal text="Core" /><br/>
-                <CharacterReveal text="Expertise" />
-            </h2>
+          <div className="container expertise-container">
+            <div className="expertise-heading-sticky">
+                <h2 className="section-title">
+                    <CharacterReveal text="Core" /><br/>
+                    <CharacterReveal text="Expertise" />
+                </h2>
+                <p className="text-muted" style={{ marginTop: '20px', maxWidth: '300px' }}>
+                    Specialized workflows designed for high-end digital creators and brands.
+                </p>
+            </div>
+            
             <motion.div 
-              className="expertise-list"
+              className="expertise-scroll-list"
               initial="hidden"
               whileInView="visible"
               viewport={{ once: true }}
               variants={staggerContainer}
             >
               {[
-                { title: "SHORT-FORM CONTENT", desc: "Viral-ready Reels and Shorts optimized for retention." },
-                { title: "YOUTUBE EDITING", desc: "Advanced storytelling and dynamic pacing for creators." },
-                { title: "COLOR GRADING", desc: "High-end color palettes that establish cinematic quality." },
-                { title: "MOTION GRAPHICS", desc: "Kinetic typography and After Effects animations." }
+                { title: "SHORT-FORM CONTENT", desc: "Viral-ready Reels and Shorts optimized for retention and extreme audience engagement using advanced pacing techniques." },
+                { title: "YOUTUBE EDITING", desc: "Advanced storytelling and dynamic pacing for creators looking to scale their channels with cinematic production value." },
+                { title: "COLOR GRADING", desc: "High-end color palettes developed in DaVinci Resolve that establish unique brand moods and premium cinematic quality." },
+                { title: "MOTION GRAPHICS", desc: "Sophisticated After Effects animations, kinetic typography, and custom VFX that elevate technical narratives." }
               ].map((item, i) => (
-                <motion.div key={i} style={{ marginBottom: '40px' }} variants={fadeInUp}>
-                  <h4 style={{ fontFamily: 'Outfit', color: 'var(--accent-purple)', marginBottom: '5px' }}>{item.title}</h4>
-                  <p className="text-muted" style={{ fontSize: '0.95rem' }}>{item.desc}</p>
+                <motion.div key={i} className="expertise-item-frame" variants={fadeInUp}>
+                  <h4 style={{ fontFamily: 'Outfit', color: 'var(--accent-purple)', fontSize: '1.5rem', marginBottom: '15px' }}>{item.title}</h4>
+                  <p className="text-muted" style={{ fontSize: '1.1rem', lineHeight: '1.6' }}>{item.desc}</p>
                 </motion.div>
               ))}
             </motion.div>

@@ -869,7 +869,7 @@ footer::before {
 
 .footer-spotlight-fixture {
   position: absolute;
-  top: -140px;
+  top: -80px;
   left: 50%;
   transform-origin: center top;
   width: 40px;
@@ -896,7 +896,7 @@ footer::before {
 
 .footer-spotlight-beam {
   position: absolute;
-  top: -124px;
+  top: -64px;
   left: 50%;
   width: 150px;
   height: 200px;

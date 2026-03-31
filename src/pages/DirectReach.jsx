@@ -9,41 +9,41 @@ const X = () => <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stro
 import BookingCTA from '../components/BookingCTA';
 
 const fadeInUp = {
-  hidden: { opacity: 0, y: 30 },
-  visible: {
-    opacity: 1, y: 0,
-    transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] }
-  }
+    hidden: { opacity: 0, y: 30 },
+    visible: {
+        opacity: 1, y: 0,
+        transition: { duration: 0.8, ease: [0.16, 1, 0.3, 1] }
+    }
 };
 
 const contactMethods = [
-  { 
-    icon: <Mail className="w-8 h-8" />, 
-    label: 'Email', 
-    value: 'hello@piyushrawat.com', 
-    link: 'mailto:hello@piyushrawat.com',
-    color: 'rgba(133, 77, 255, 0.2)'
-  },
-  { 
-    icon: <MessageSquare className="w-8 h-8" />, 
-    label: 'WhatsApp', 
-    value: 'Message Directly', 
-    link: 'https://wa.me/910000000000',
-    color: 'rgba(37, 211, 102, 0.2)' 
-  },
-  { 
-    icon: <Phone className="w-8 h-8" />, 
-    label: 'Direct Call', 
-    value: '+91 00000 00000', 
-    link: 'tel:+910000000000',
-    color: 'rgba(52, 152, 219, 0.2)'
-  }
+    {
+        icon: <Mail className="w-8 h-8" />,
+        label: 'Email',
+        value: 'hello@piyushrawat.com',
+        link: 'mailto:hello@piyushrawat.com',
+        color: 'rgba(133, 77, 255, 0.2)'
+    },
+    {
+        icon: <MessageSquare className="w-8 h-8" />,
+        label: 'WhatsApp',
+        value: 'Message Directly',
+        link: 'https://wa.me/918700040423',
+        color: 'rgba(37, 211, 102, 0.2)'
+    },
+    {
+        icon: <Phone className="w-8 h-8" />,
+        label: 'Direct Call',
+        value: '+91 87000 40423',
+        link: 'tel:+918700040423',
+        color: 'rgba(52, 152, 219, 0.2)'
+    }
 ];
 
 const socialLinks = [
-  { icon: <Instagram />, label: 'Instagram', link: '#' },
-  { icon: <Linkedin />, label: 'LinkedIn', link: '#' },
-  { icon: <X />, label: 'X', link: '#' }
+    { icon: <Instagram />, label: 'Instagram', link: 'https://www.instagram.com/ig_rouf' },
+    { icon: <Linkedin />, label: 'LinkedIn', link: '#' },
+    { icon: <X />, label: 'X', link: 'https://www.youtube.com/channel/UCE-NP3ZWAo2O1NyDoL039rA' }
 ];
 
 const Contact = () => {
@@ -82,16 +82,16 @@ const Contact = () => {
                                     alignItems: 'center',
                                     gap: '20px'
                                 }}
-                                whileHover={{ 
-                                    y: -10, 
+                                whileHover={{
+                                    y: -10,
                                     background: 'rgba(255,255,255,0.05)',
                                     borderColor: 'rgba(133, 77, 255, 0.3)',
                                     boxShadow: '0 20px 40px rgba(0,0,0,0.4)'
                                 }}
                             >
-                                <div style={{ 
-                                    padding: '20px', 
-                                    borderRadius: '24px', 
+                                <div style={{
+                                    padding: '20px',
+                                    borderRadius: '24px',
                                     background: method.color,
                                     color: 'var(--accent-purple)'
                                 }}>
@@ -103,7 +103,7 @@ const Contact = () => {
                         ))}
                     </div>
 
-                    <motion.div 
+                    <motion.div
                         initial={{ opacity: 0 }}
                         whileInView={{ opacity: 1 }}
                         transition={{ delay: 0.5 }}

@@ -645,17 +645,15 @@ footer::before {
 }
 
 .contact-headline {
-  font-size: clamp(4rem, 13vw, 16rem);
+  font-size: clamp(4rem, 13vw, 12rem);
   font-weight: 900;
   font-family: 'Outfit', sans-serif;
-  line-height: 0.85;
+  line-height: normal;
   letter-spacing: -2px;
-  background: linear-gradient(135deg, #ffffff 0%, rgba(133, 77, 255, 0.9) 60%, #ffffff 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  display: block;
-  transition: opacity 0.3s ease;
+  color: #ffffff;
+  display: flex;
+  justify-content: center;
+  width: 100%;
 }
 
 .contact-link:hover .contact-headline {

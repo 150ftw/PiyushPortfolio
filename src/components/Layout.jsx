@@ -20,33 +20,38 @@ const FluctuatingText = ({ text, delayOffset = 0 }) => {
   const chars = Array.from(text);
   
   return (
-    <span style={{ display: 'inline-flex', flexWrap: 'wrap', justifyContent: 'center' }}>
+    <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', color: '#fff' }}>
       {chars.map((char, i) => (
         <motion.span
           key={i}
           animate={{ 
             opacity: [1, 0.8, 1],
-            filter: ['blur(0px)', 'blur(1.5px)', 'blur(0px)'],
-            scale: [1, 1.02, 1],
+            textShadow: [
+              '0 0 0px rgba(168, 85, 247, 0)',
+              '0 0 15px rgba(168, 85, 247, 0.8)',
+              '0 0 0px rgba(168, 85, 247, 0)',
+            ],
+            scale: [1, 1.05, 1],
           }}
           transition={{
-            duration: 3,
+            duration: 4,
             repeat: Infinity,
             repeatType: "mirror",
-            repeatDelay: 3 + Math.random() * 2,
+            repeatDelay: 2 + Math.random() * 2,
             delay: i * 0.1 + delayOffset,
             ease: "easeInOut"
           }}
           style={{ 
             display: 'inline-block', 
             whiteSpace: char === ' ' ? 'pre' : 'normal',
-            willChange: 'transform, opacity, filter'
+            lineHeight: '1',
+            margin: '0 -1px'
           }}
         >
           {char}
         </motion.span>
       ))}
-    </span>
+    </div>
   );
 };
 

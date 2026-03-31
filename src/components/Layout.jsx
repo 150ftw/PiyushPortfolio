@@ -73,7 +73,6 @@ const FluctuatingText = ({ text, delayOffset = 0 }) => {
 const Layout = ({ children, isMobile, mouseX, mouseY }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
-  const [hoveredIndex, setHoveredIndex] = useState(null);
   const location = useLocation();
   const lenis = useLenis();
 
@@ -259,113 +258,21 @@ const Layout = ({ children, isMobile, mouseX, mouseY }) => {
           </Link>
 
           <div className="footer-meta" style={{ position: 'relative', marginTop: isMobile ? '60px' : '100px' }}>
-            {/* Physical Spotlight Fixture */}
-            {!isMobile && (
-              <motion.div
-                className="footer-spotlight-fixture"
-                initial={{ opacity: 0, x: "-50%" }}
-                animate={{
-                  opacity: 1,
-                  x: "-50%",
-                  filter: hoveredIndex === null 
-                    ? ["drop-shadow(0 0 12px rgba(133, 77, 255, 0.4))", "drop-shadow(0 0 20px rgba(133, 77, 255, 0.6))", "drop-shadow(0 0 12px rgba(133, 77, 255, 0.4))"] 
-                    : "drop-shadow(0 0 18px rgba(133, 77, 255, 0.7))"
-                }}
-                transition={{ 
-                  filter: hoveredIndex === null ? { duration: 3, repeat: Infinity, ease: "easeInOut" } : { duration: 0.3 }
-                }}
-                style={{ position: 'absolute' }}
-              >
-                <svg width="40" height="24" viewBox="0 0 40 24" fill="none" xmlns="http://www.w3.org/2000/svg" style={{ position: 'absolute', left: '50%', transform: 'translateX(-50%)' }}>
-                  <path d="M0 4C0 1.79086 1.79086 0 4 0H36C38.2091 0 40 1.79086 40 4V10C40 12.2091 38.2091 14 36 14H4C1.79086 14 0 12.2091 0 10V4Z" fill="#1A1A1A"/>
-                  <rect x="4" y="2" width="32" height="10" rx="2" fill="#333333"/>
-                  <circle cx="20" cy="8" r="5" fill="#4B4B4B"/>
-                  <circle cx="20" cy="8" r="3" fill="white" className="spotlight-lens-glow" />
-                  <path d="M10 14L8 24M30 14L32 24" stroke="#1A1A1A" strokeWidth="2" strokeLinecap="round"/>
-                </svg>
-                <div className="footer-spotlight-lens-flare" style={{ position: 'absolute', left: '50%', top: '8px', transform: 'translate(-50%, -50%)' }} />
-              </motion.div>
-            )}
-
-            {/* Multi-Ray Spotlight Beam */}
-            {!isMobile && (
-              <motion.div
-                className="footer-spotlight-beam"
-                initial={{ opacity: 0, x: "-50%" }}
-                animate={{
-                  opacity: 1,
-                  x: "-50%",
-                  rotate: hoveredIndex === 0 ? 68 : hoveredIndex === 1 ? 0 : hoveredIndex === 2 ? -68 : 0,
-                  scaleY: hoveredIndex === 0 || hoveredIndex === 2 ? 1.35 : 1
-                }}
-                transition={{
-                  rotate: { duration: 0.7, ease: [0.16, 1, 0.3, 1] },
-                  scaleY: { duration: 0.7, ease: [0.16, 1, 0.3, 1] }
-                }}
-              >
-                {/* Atmospheric Back-glow */}
-                <motion.div className="footer-light-cone" />
-                
-                {/* 12-Ray Cinematic Cluster from Single Source */}
-                {[...Array(12)].map((_, i) => (
-                  <motion.div
-                    key={i}
-                    className="footer-ray-streak"
-                    initial={{ rotate: (i - 5.5) * 3.5, opacity: 0 }}
-                    animate={{ 
-                      opacity: hoveredIndex === null ? [0.1, 0.25, 0.1] : 0.4,
-                      scaleY: hoveredIndex === null ? [1, 1.05, 1] : 1.15
-                    }}
-                    transition={{
-                      duration: 3 + i * 0.3,
-                      repeat: Infinity,
-                      ease: "easeInOut"
-                    }}
-                    style={{
-                      position: 'absolute',
-                      top: 0,
-                      left: '50%',
-                      x: '-50%',
-                      transformOrigin: 'top center'
-                    }}
-                  />
-                ))}
-              </motion.div>
-            )}
 
             {[
               "Ghaziabad, India",
               ...(!isMobile ? ["Available Worldwide"] : []),
               `@ ${new Date().getFullYear()} Piyush Rawat`
             ].map((item, i) => (
-              <motion.div 
+              <div 
                 key={i}
                 className="footer-meta-item"
-                onHoverStart={() => setHoveredIndex(i)}
-                onHoverEnd={() => setHoveredIndex(null)}
                 style={{ position: 'relative', cursor: 'default' }}
               >
-                {/* Reflection Puddle (Floor Impact) */}
-                <motion.div 
-                  className="footer-light-puddle"
-                  initial={{ opacity: 0, scale: 0.8 }}
-                  animate={{ 
-                    opacity: (hoveredIndex === i) ? 1 : (hoveredIndex === null && i === 1) ? 0.6 : 0,
-                    scale: (hoveredIndex === i) ? 1.1 : (hoveredIndex === null && i === 1) ? 1 : 0.8,
-                  }}
-                  transition={{ duration: 0.6, ease: "easeOut" }}
-                />
-
-                <motion.span
-                  animate={{ 
-                    color: (hoveredIndex === i || (hoveredIndex === null && i === 1)) ? '#fff' : 'rgba(255, 255, 255, 0.4)',
-                    textShadow: (hoveredIndex === i || (hoveredIndex === null && i === 1)) ? '0 0 10px rgba(168, 85, 247, 0.5)' : 'none'
-                  }}
-                  transition={{ duration: 0.4 }}
-                >
+                <span style={{ color: 'rgba(255, 255, 255, 0.4)' }}>
                   {item}
-                </motion.span>
-              </motion.div>
+                </span>
+              </div>
             ))}
           </div>
         </div>

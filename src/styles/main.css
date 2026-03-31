@@ -7,7 +7,8 @@
   --text-primary: #FFFFFF;
   --text-secondary: #FAF5EA;
   --text-muted: #888888;
-  --accent-orange: #FF7738;
+  --accent-purple: #A855F7;
+  --accent-purple-glow: rgba(168, 85, 247, 0.4);
   --accent-gold: #FFAE00;
   --font-hero: clamp(3.5rem, 12vw, 10rem);
   --font-h2: clamp(2.5rem, 6vw, 4rem);
@@ -86,7 +87,7 @@ ul {
 }
 
 /* Utilities */
-.text-orange { color: var(--accent-orange); }
+.text-accent { color: var(--accent-purple); }
 .text-gold { color: var(--accent-gold); }
 .text-muted { color: var(--text-muted); }
 .section-padding { padding: var(--section-padding) 0; }
@@ -181,7 +182,7 @@ nav.scrolled {
 }
 
 .menu-item:hover {
-  color: var(--accent-orange);
+  color: var(--accent-purple);
   transform: scale(1.05);
 }
 
@@ -231,7 +232,7 @@ nav.scrolled {
 .stat-value {
   font-size: 2.5rem;
   font-weight: 800;
-  color: var(--accent-orange);
+  color: var(--accent-purple);
   font-family: 'Outfit', sans-serif;
 }
 
@@ -245,7 +246,7 @@ nav.scrolled {
 
 /* Marquee */
 .marquee-container {
-  background-color: var(--accent-orange);
+  background-color: var(--accent-purple);
   padding: 30px 0;
   overflow: hidden;
   white-space: nowrap;
@@ -327,7 +328,7 @@ nav.scrolled {
   left: 50%;
   width: 60px;
   height: 60px;
-  background: var(--accent-orange);
+  background: var(--accent-purple);
   border-radius: 50%;
   transform: translate(-50%, -50%) scale(0.8);
   opacity: 0;

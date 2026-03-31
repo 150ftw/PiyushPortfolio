@@ -52,7 +52,7 @@ const About = () => {
 
                             <div className="senior-glass" style={{ borderRadius: '40px', overflow: 'hidden', border: '1px solid rgba(255, 255, 255, 0.1)' }}>
                                 <img
-                                    src="/assets/piyush_main.png"
+                                    src="/assets/piyush.png"
                                     alt="Piyush Rawat"
                                     style={{ width: '100%', height: 'auto', display: 'block', filter: 'contrast(1.1) brightness(1.05)' }}
                                 />
